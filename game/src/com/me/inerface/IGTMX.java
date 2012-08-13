@@ -57,5 +57,6 @@ public interface  IGTMX {
 	public void draw(OrthographicCamera c);
 	
 	public List<TiledObject> getObjects();
+	public List<TiledObject> getToggles();
 
 }

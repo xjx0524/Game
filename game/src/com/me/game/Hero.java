@@ -138,7 +138,7 @@ public class Hero extends ASprite{
 			batch.draw(ani[curdirection].getKeyFrame(time,true), x, y);
 		else{
 			batch.draw(ani[curdirection].getKeyFrame(0),x,y);
-			time=0;	
+			time=0;
 		}
 		float ax=x-sx-ox;float ay=y-sy-oy;
 		ox=x-sx;oy=y-sy;

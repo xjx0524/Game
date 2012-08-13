@@ -22,13 +22,31 @@ public class Skill implements IGSkill {
 		hero=null;
 	}
 	
+	Skill(G.TAG index,String[] params){
+		super();
+		this.index=index;
+		this.params=params;
+		hero=null;
+		parse();
+	}
+	
+	private void parse(){
+		switch ((G.TAG)index){
+		case SKILL_PUSH:
+		case SKILL_MOVE:params[0]=G.TAG.valueOf((String)params[0]);break;		
+		}
+	}
+	
 	public Skill generate(G.TAG gentag){
 		if (hero==null) hero=G.hero;
 		index=hero.skillindex;
 		switch (gentag){
 		case GEN_STAY:{
 			switch(hero.skillindex){
-			default:index=G.TAG.SKILL_NULL;params=null;break;
+			default:{
+				index=G.TAG.SKILL_MOVE;
+				params=new Object[]{G.parseDirection(hero.curdirection)};
+				}break;
 			}			
 		}break;
 		case GEN_PUSH:{

@@ -29,6 +29,8 @@ public class GameScreen implements Screen,InputProcessor{
 		
 		tmx=XTiledLoader.initMap(Gdx.files.internal("map/1.tmx"), "map/");
 		
+		G.toggleGroup=new ToggleGroup();
+		
 		stg=new MapObjectGroup();
 		hero=new Hero();
 		stg.addActor(hero);
@@ -51,6 +53,9 @@ public class GameScreen implements Screen,InputProcessor{
 		G.tmx=null;
 		G.motp=null;
 		G.sbtp=null;
+		G.objectGroup=null;
+		G.skillBottonGroup=null;
+		G.toggleGroup=null;
 	}
 
 	public void hide() {

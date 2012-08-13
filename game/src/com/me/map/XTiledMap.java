@@ -113,7 +113,13 @@ public class XTiledMap implements IGTMX {
 	} 
 	
 	public List<TiledObject> getObjects(){
-		if (map.objectGroups==null||map.objectGroups.get(0)==null) return null;
+		if (map.objectGroups==null||map.objectGroups.size()<1||map.objectGroups.get(0)==null) return null;
 		return map.objectGroups.get(0).objects;
+	}
+
+	@Override
+	public List<TiledObject> getToggles() {
+		if (map.objectGroups==null||map.objectGroups.size()<2||map.objectGroups.get(1)==null) return null;
+		return map.objectGroups.get(1).objects;
 	}
 }

@@ -11,13 +11,14 @@ public final class G {
 	public static enum TAG{
 		AM_MOVE,
 		DIR_LEFT,DIR_RIGHT,DIR_DOWN,DIR_UP,
-		SKILL_NULL,SKILL_PUSH, SKILL_OBJECTMOVEDON,
+		SKILL_PUSH,SKILL_PULL,SKILL_JUMP,SKILL_FREEZE,SKILL_THAW,
+		SKILL_NULL,SKILL_OBJECTMOVEDON,SKILL_MOVE,
 		GEN_STAY,GEN_PUSH};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		
 		}
-	public static boolean log = false;
+	public static boolean log = true;
 	public static boolean hasmap = true;
 	public static boolean lockInput = false;
 	public static Hero hero;
@@ -27,6 +28,7 @@ public final class G {
 	public static SpriteBatch batch;
 	public static IGObjectGroup objectGroup;
 	public static SkillButtonGroup skillBottonGroup;
+	public static ToggleGroup toggleGroup;
 	public static final class Label{
 		public final static String Name="Name";
 		public final static String Avaliable="Avaliable";
@@ -51,6 +53,16 @@ public final class G {
 		case DIR_RIGHT:return 2;
 		case DIR_DOWN:return 0;
 		case DIR_UP:return 3;		
+		}		
+	}
+	
+	public static TAG parseDirection(int dir) {
+		switch (dir){
+		default: return null;
+		case 1:return TAG.DIR_LEFT;
+		case 2:return TAG.DIR_RIGHT;
+		case 0:return TAG.DIR_DOWN;
+		case 3:return TAG.DIR_UP;		
 		}		
 	}
 	
