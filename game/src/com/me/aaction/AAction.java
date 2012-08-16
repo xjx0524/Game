@@ -1,5 +1,7 @@
 package com.me.aaction;
 
+import com.me.game.G;
+
 public class AAction {
 	public static boolean showlog = true;
 	
@@ -15,14 +17,14 @@ public class AAction {
 		mTarget.addAction(this);
 		running=true;
 		stoped = false;
-		//if (showlog)	Log.i("Action", "Start: "+discribtion());
+		//if (G.log)	System.out.println(mTarget+"Start: "+discribtion());
 	}
 	
 	public void stop(){
 		running = false;
 		mTarget.removeAction(this);
 		stoped = true;
-		//if (showlog)	Log.i("Action", "Stop : "+discribtion());
+		//if (G.log)	System.out.println(mTarget+ "Stop : "+discribtion());
 	}
 	
 	public void setTag(Object tag){ mTag = tag; }

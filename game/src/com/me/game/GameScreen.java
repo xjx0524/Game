@@ -3,7 +3,6 @@ package com.me.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,10 +18,10 @@ public class GameScreen implements Screen,InputProcessor{
 	SkillButtonGroup skillstg;
 	Actor hero;
 	SpriteBatch batch;
-	Camera camera;
 	XTiledMap tmx;
 	
 	public void show() {
+		dispose();
 		G.sbtp=new SkillButtonTextureProvider();
 		G.motp=new MapObjectTextureProvider();
 		G.batch=batch = new SpriteBatch();
@@ -41,14 +40,24 @@ public class GameScreen implements Screen,InputProcessor{
 		skillstg=new SkillButtonGroup(G.ScreenWidth, G.ScreenHeight,true,batch);
 		SkillButton b=new SkillButton(G.TAG.SKILL_PUSH, SkillButton.TYPE.SELECT);
 		skillstg.addActor(b);
+		b=new SkillButton(G.TAG.SKILL_PULL, SkillButton.TYPE.SELECT);
+		skillstg.addActor(b);
+		b=new SkillButton(G.TAG.SKILL_JUMP, SkillButton.TYPE.ACTIVE);
+		skillstg.addActor(b);
 		skillstg.oganize();
 	}
 
 
 	public void dispose() {
-		stg.dispose();
-		handlestg.dispose();
-		skillstg.dispose();
+		if (stg!=null) stg.dispose();
+		if (handlestg!=null) handlestg.dispose();
+		if (skillstg!=null) skillstg.dispose();
+		stg=null;
+		handlestg=null;
+		skillstg=null;
+		tmx=null;
+		hero=null;
+		batch=null;
 		G.hero=null;
 		G.tmx=null;
 		G.motp=null;
@@ -59,13 +68,11 @@ public class GameScreen implements Screen,InputProcessor{
 	}
 
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void render(float t) {
@@ -81,8 +88,7 @@ public class GameScreen implements Screen,InputProcessor{
 	}
 
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public boolean keyDown(int keycode) {	return hero.keyDown(keycode);}

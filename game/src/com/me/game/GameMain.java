@@ -9,6 +9,6 @@ public class GameMain extends Game {
 	
 	public void create() {
 				Gdx.graphics.setDisplayMode(G.ScreenWidth, G.ScreenHeight,false);
-				setScreen(curScreen=new GameScreen());				
+				setScreen(curScreen=new GameScreen());
 			}
 }

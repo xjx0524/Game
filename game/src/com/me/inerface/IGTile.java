@@ -36,6 +36,8 @@ public interface IGTile {
 	
 	/**获取该瓦片是否可通行*/
 	public boolean getIsAvaliable();
+	public boolean getIsAvaliableForObject();
+	public boolean getIsAvaliableForJump();
 	
 	/**获取该瓦片屏幕坐标*/
 	public Vector2 getLocation();
@@ -51,5 +53,7 @@ public interface IGTile {
 
 	/**获取该瓦片属性*/
 	public Map<String, String> getProperties();
+
+
 
 }

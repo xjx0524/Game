@@ -29,10 +29,10 @@ public class SkillButton extends Actor {
 	boolean getIsactived(){return actived;}
 	
 	void active(boolean actived){
-		if (G.log) System.out.println(""+tag+type+" actived is "+actived);
+		if (G.log) System.out.println(""+tag+" actived is "+actived);
 		this.actived=actived;
 		if (actived){
-			
+			Skill.cast(tag);
 		}
 	}
 	

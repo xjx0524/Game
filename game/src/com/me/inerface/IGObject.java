@@ -24,4 +24,6 @@ public interface IGObject {
 	/**获取该物体是否可通行*/
 	public boolean getIsAvaliable();
 
+	boolean getIsAvaliableForObject();
+
 }

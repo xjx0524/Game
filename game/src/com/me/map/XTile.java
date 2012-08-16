@@ -53,6 +53,22 @@ public class XTile implements IGTile {
 		String s=map.map.getTileProperty(id, G.Label.Avaliable);
 		return (s==null||("true").equals(s))&&(getObject()==null||getObject().getIsAvaliable());
 	}
+	
+	@Override
+	public boolean getIsAvaliableForObject() {
+		//String s=map.map.getTileProperty(id, G.Label.Avaliable);
+		return getIsAvaliable();
+	}
+	
+	@Override
+	public boolean getIsAvaliableForJump() {
+		//String s=map.map.getTileProperty(id, G.Label.Avaliable);
+		if (getObject()==null)
+			return true;
+		else
+			return getObject().getIsAvaliable();
+	}
+
 
 	@Override
 	public Vector2 getLocation() {

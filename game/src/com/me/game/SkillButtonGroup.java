@@ -63,6 +63,9 @@ public class SkillButtonGroup extends Stage {
 		switch(sel.size()){
 		case 1:sel.get(0).x=8;sel.get(0).y=136;
 			break;
+		case 2:sel.get(0).x=8;sel.get(0).y=140;
+			   sel.get(1).x=8;sel.get(1).y=100;
+			   break;
 		}
 		switch(act.size()){
 		case 1:act.get(0).x=280;act.get(0).y=104;

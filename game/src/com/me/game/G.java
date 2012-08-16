@@ -13,7 +13,7 @@ public final class G {
 		DIR_LEFT,DIR_RIGHT,DIR_DOWN,DIR_UP,
 		SKILL_PUSH,SKILL_PULL,SKILL_JUMP,SKILL_FREEZE,SKILL_THAW,
 		SKILL_NULL,SKILL_OBJECTMOVEDON,SKILL_MOVE,
-		GEN_STAY,GEN_PUSH};
+		GEN_STAY,GEN_PUSH, GEN_PULL};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		

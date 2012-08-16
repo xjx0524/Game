@@ -24,7 +24,7 @@ import com.me.inerface.IGTMX;
 public class Hero extends ASprite{
 	
 	private Animation ani[]=new Animation[4];
-	public static AActionInterval move[]=new AActionInterval[4];
+	private AActionInterval move[]=new AActionInterval[4];
 	private float time = 0;
 	private int direction = 0;
 	int curdirection = 0;
@@ -32,7 +32,7 @@ public class Hero extends ASprite{
 	private boolean iscurmoving = false;
 	private Texture tex;
 	private IGTMX tmx;
-	private int mapx,mapy;
+	public int mapx,mapy;
 	private float sy;
 	private float sx;
 	private float oy;
@@ -86,6 +86,15 @@ public class Hero extends ASprite{
 										tmx.getTile(gx, gy).active(skill.generate(G.TAG.GEN_PUSH));
 										a=ADelay.$(0.1f);
 									}else{
+										int kx=mapx,ky=mapy;
+										switch(3-curdirection){
+										case 0:ky=mapy-1;break;
+										case 1:kx=mapx-1;break;
+										case 2:kx=mapx+1;break;
+										case 3:ky=mapy+1;break;							
+										}
+										tmx.getTile(kx, ky).active(skill.generate(G.TAG.GEN_PULL));
+										
 										mapx=gx;mapy=gy;
 										if (G.log) System.out.println("HeroPos:("+mapx+","+mapy+")");
 									}

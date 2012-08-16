@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.me.game.GameMain;
 
 public class MainActivity extends AndroidApplication {
     @Override
@@ -15,5 +14,11 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = false;
         
         initialize(new GameMain(), cfg);
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	System.exit(0);
     }
 }
