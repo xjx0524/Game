@@ -10,10 +10,11 @@ public final class G {
 	public static final int ScreenWidth  = 320;
 	public static enum TAG{
 		AM_MOVE,
-		DIR_LEFT,DIR_RIGHT,DIR_DOWN,DIR_UP,
-		SKILL_PUSH,SKILL_PULL,SKILL_JUMP,SKILL_FREEZE,SKILL_THAW,
-		SKILL_NULL,SKILL_OBJECTMOVEDON,SKILL_MOVE,
-		GEN_STAY,GEN_PUSH, GEN_PULL};
+		DIR_LEFT, DIR_RIGHT, DIR_DOWN, DIR_UP,
+		SKILL_PUSH, SKILL_PULL, SKILL_JUMP, SKILL_FREEZE, SKILL_THAW, SKILL_FOOTSTEP,
+		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,
+		GEN_STAY, GEN_PUSH, GEN_PULL,
+		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		
@@ -40,11 +41,11 @@ public final class G {
 		public final static String Arg4="Arg4";
 		public final static String OName="Name";
 		public final static String OAvaliable="Avaliable";
-		public final static String OArg0="OArg0";
-		public final static String OArg1="OArg1";
-		public final static String OArg2="OArg2";
-		public final static String OArg3="OArg3";
-		public final static String OArg4="OArg4";	
+		public final static String OArg0="Arg0";
+		public final static String OArg1="Arg1";
+		public final static String OArg2="Arg2";
+		public final static String OArg3="Arg3";
+		public final static String OArg4="Arg4";	
 	}
 	public static int parseDirection(TAG tag) {
 		switch (tag){

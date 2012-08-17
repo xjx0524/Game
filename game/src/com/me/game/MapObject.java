@@ -33,7 +33,11 @@ public class MapObject extends ASprite implements IGObject {
 	public String name;
 	public MapObjectGroup group;
 	private boolean lock = false;
-	private AActionInterval move[] = new AActionInterval[4]; 
+	private AActionInterval move[] = new AActionInterval[4];
+	private G.TAG id;
+	
+	@Override
+	public G.TAG getId(){return id;}
 
 	static MapObject create(MapObjectGroup mapObjectGroup, TiledObject p){
 		MapObject o=new MapObject();
@@ -43,6 +47,7 @@ public class MapObject extends ASprite implements IGObject {
 		o.name=p.name;
 		if (o.name==null) return null;
 		o.tex=G.motp.getTexture(o.name);
+		o.id=parseName(o.name);
 		String s;
 		Map<String,String> map=p.properties;
 		if (map!=null){
@@ -58,15 +63,31 @@ public class MapObject extends ASprite implements IGObject {
 		o.move[1]=AMoveBy.$(0.5f, -32,0);
 		o.move[2]=AMoveBy.$(0.5f, 32,0);
 		o.move[3]=AMoveBy.$(0.5f, 0,32);
-		return o;
 		
+		return o;		
 	}
 	
+	private static TAG parseName(String name) {
+		if (name.equalsIgnoreCase("block"))		return G.TAG.OBJ_BLOCK; else
+		if (name.equalsIgnoreCase("pushable"))	return G.TAG.OBJ_PUSHABLE; else
+		if (name.equalsIgnoreCase("pullable"))	return G.TAG.OBJ_PULLABLE; else
+		if (name.equalsIgnoreCase("door"))		return G.TAG.OBJ_DOOR; else
+		if (name.equalsIgnoreCase("ice"))		return G.TAG.OBJ_ICE; else
+		if (name.equalsIgnoreCase("water"))		return G.TAG.OBJ_WATER; else
+		if (name.equalsIgnoreCase("wall"))		return G.TAG.OBJ_WALL; else
+		return null;
+	}
+
 	private void parseArg(Map<String, String> map) {
-	//	switch(name){
-	//	default:return;
-	//	}
-		
+		switch(id){
+		default:return;
+		case OBJ_DOOR:	if (map.get(G.Label.OArg0)=="1") arg[0]=1; else
+						if (map.get(G.Label.OArg0)=="2") arg[0]=2; else
+						if (map.get(G.Label.OArg0)=="3") arg[0]=3; 
+						arg[1]=false;break;
+		case OBJ_ICE:
+		case OBJ_WATER: arg[0]=G.TAG.valueOf(map.get(G.Label.OArg0));break;
+		}		
 	}
 	
 	/**获取该物体是否可通行*/
@@ -106,18 +127,24 @@ public class MapObject extends ASprite implements IGObject {
 		switch((G.TAG)skill.getIndex()){
 		default:return;
 		case SKILL_PULL:
-		case SKILL_PUSH:pushedactive(skill);break;
+		case SKILL_PUSH:pushedActive(skill);break;
+		case SKILL_FOOTSTEP:footstepActive(skill);break;
+		case SKILL_FREEZE:freeze(skill);
+		case SKILL_THAW:thaw(skill);
 		}		
 	}
-
 
 	@Override
 	public void unactive(IGSkill skill) {
 		if(G.log) System.out.println("UnactiveObject:("+mapx+","+mapy+") by "+skill);
-		
+		switch((G.TAG)skill.getIndex()){
+		default:return;
+		case SKILL_FOOTSTEP:footstepUnactive(skill);break;
+		}	
 	}
 	
-	private void pushedactive(final IGSkill skill) {
+	private void pushedActive(final IGSkill skill) {
+		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE&&id!=TAG.OBJ_BLOCK) return;
 		lock=true;
 		runAction(ASequence.$(
 				ABreakIf.$(new IIfFunc(){
@@ -146,8 +173,42 @@ public class MapObject extends ASprite implements IGObject {
 				));
 	}
 	
+	private void footstepActive(IGSkill skill) {
+		if (id!=TAG.OBJ_DOOR) return;
+		switch ((Integer)arg[0]){
+		case 1:tex=G.motp.getTexture("door_open");arg[1]=true;break;
+		case 2:tex=G.motp.getTexture("door_open");arg[1]=true;break;
+		case 3:	arg[1]=!(Boolean)arg[1];
+				if ((Boolean)arg[1]) tex=G.motp.getTexture("door_open");
+				else tex=G.motp.getTexture("door");
+				break;			
+		}					
+	}
+
+	private void footstepUnactive(IGSkill skill) {
+		if (id!=TAG.OBJ_DOOR) return;
+		if ((Integer)arg[0]==1) {
+			tex=G.motp.getTexture("door");
+			arg[1]=false;
+		}		
+	}
+	
 	@Override
 	public boolean getIsAvaliableForObject() {
 		return getIsAvaliable();
+	}
+	
+	private void thaw(IGSkill skill) {
+		name="water";
+		id=TAG.OBJ_WATER;
+		tex=G.motp.getTexture(name);
+		avaliable=true;
+	}
+
+	private void freeze(IGSkill skill) {
+		name="ice";
+		id=TAG.OBJ_ICE;
+		tex=G.motp.getTexture(name);
+		avaliable=false;
 	}
 }

@@ -5,6 +5,7 @@ import com.me.aaction.ACall;
 import com.me.aaction.AParabola;
 import com.me.aaction.ASequence;
 import com.me.aaction.ICallFunc;
+import com.me.game.G.TAG;
 import com.me.inerface.IGSkill;
 import com.me.inerface.IGTile;
 
@@ -108,7 +109,38 @@ public class Skill implements IGSkill {
 		if (G.lockInput) return;
 		switch (tag){
 		case SKILL_JUMP:jump();break;
+		case SKILL_FREEZE:freeze();break;
+		case SKILL_THAW:thaw();break;
 		}
+	}
+
+	private static void thaw() {
+		int mapx=G.hero.mapx;
+		int mapy=G.hero.mapy;
+		int gx=mapx,gy=mapy;
+		switch(G.parseDirection(G.hero.curdirection)){
+		case DIR_DOWN:gy=mapy-1;break;
+		case DIR_LEFT:gx=mapx-1;break;
+		case DIR_RIGHT:gx=mapx+1;break;
+		case DIR_UP:gy=mapy+1;break;
+		}
+		if (G.tmx.getObject(gx, gy)==null||G.tmx.getObject(gx, gy).getId()!=TAG.OBJ_ICE)return;
+		G.tmx.getObject(gx, gy).active(new Skill(TAG.SKILL_THAW));	
+		
+	}
+
+	private static void freeze() {
+		int mapx=G.hero.mapx;
+		int mapy=G.hero.mapy;
+		int gx=mapx,gy=mapy;
+		switch(G.parseDirection(G.hero.curdirection)){
+		case DIR_DOWN:gy=mapy-1;break;
+		case DIR_LEFT:gx=mapx-1;break;
+		case DIR_RIGHT:gx=mapx+1;break;
+		case DIR_UP:gy=mapy+1;break;
+		}
+		if (G.tmx.getObject(gx, gy)==null||G.tmx.getObject(gx, gy).getId()!=TAG.OBJ_WATER)return;
+		G.tmx.getObject(gx, gy).active(new Skill(TAG.SKILL_FREEZE));	
 	}
 
 	static private void jump() {

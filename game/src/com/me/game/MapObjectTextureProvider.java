@@ -14,10 +14,15 @@ public class MapObjectTextureProvider {
 	}
 	
 	public TextureRegion getTexture(String name){
-		if (name.equalsIgnoreCase("block")) 
-			return texs[0][0];
-		else	
-		return null;
+		if (name.equalsIgnoreCase("block"))		return texs[0][0]; else
+		if (name.equalsIgnoreCase("pushable"))	return texs[0][0]; else
+		if (name.equalsIgnoreCase("pullable"))	return texs[0][0]; else
+		if (name.equalsIgnoreCase("door"))		return texs[0][2]; else
+		if (name.equalsIgnoreCase("door_open"))	return texs[0][3]; else
+		if (name.equalsIgnoreCase("ice"))		return texs[0][2]; else
+		if (name.equalsIgnoreCase("water"))		return texs[0][3]; else
+		if (name.equalsIgnoreCase("wall"))		return texs[0][3]; else
+		return null;	
 	}
 
 }

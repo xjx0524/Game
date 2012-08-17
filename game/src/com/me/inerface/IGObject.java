@@ -1,5 +1,7 @@
 package com.me.inerface;
 
+import com.me.game.G.TAG;
+
 /**放置物<br/>
  * 由我实现*/
 public interface IGObject {
@@ -25,5 +27,7 @@ public interface IGObject {
 	public boolean getIsAvaliable();
 
 	boolean getIsAvaliableForObject();
+
+	TAG getId();
 
 }
