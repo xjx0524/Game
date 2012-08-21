@@ -143,14 +143,13 @@ public class MapObject extends ASprite implements IGObject {
 		}	
 	}
 	
-	private void pushedActive(final IGSkill skill) {
-		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE&&id!=TAG.OBJ_BLOCK) return;
+	public void forward(final TAG dir){
 		lock=true;
 		runAction(ASequence.$(
 				ABreakIf.$(new IIfFunc(){
 					public boolean onCall(Object[] params) {
 						gx=mapx;gy=mapy;
-						switch((TAG)skill.getParams()[0]){
+						switch(dir){
 						case DIR_DOWN:gy=mapy-1;break;
 						case DIR_LEFT:gx=mapx-1;break;
 						case DIR_RIGHT:gx=mapx+1;break;
@@ -161,7 +160,7 @@ public class MapObject extends ASprite implements IGObject {
 						return !b;
 					}				
 				}),
-				move[G.parseDirection((TAG)skill.getParams()[0])],
+				move[G.parseDirection(dir)],
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
 						mapx=gx;mapy=gy;
@@ -171,6 +170,11 @@ public class MapObject extends ASprite implements IGObject {
 					}
 				})
 				));
+	}
+	
+	private void pushedActive(final IGSkill skill) {
+		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE&&id!=TAG.OBJ_BLOCK) return;
+		forward((TAG)skill.getParams()[0]);
 	}
 	
 	private void footstepActive(IGSkill skill) {

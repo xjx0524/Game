@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.aaction.AActionInterval;
+import com.me.aaction.ABreakIf;
 import com.me.aaction.ACall;
 import com.me.aaction.ADelay;
 import com.me.aaction.AFiniteTimeAction;
@@ -19,6 +20,8 @@ import com.me.aaction.ASequence;
 import com.me.aaction.ASprite;
 import com.me.aaction.AWaitByTag;
 import com.me.aaction.ICallFunc;
+import com.me.aaction.IIfFunc;
+import com.me.game.G.TAG;
 import com.me.inerface.IGTMX;
 
 public class Hero extends ASprite{
@@ -54,6 +57,20 @@ public class Hero extends ASprite{
 		for (int i=0;i<4;++i){
 			ani[i]=new Animation(0.25f,texs[i]);
 		}
+
+		tmx=G.tmx;
+		Vector2 v;
+		sx=160-16;sy=120-24;
+		if (G.hasmap){
+			v=tmx.getStartPointIndex();
+			mapx=(int)v.x;mapy=(int)v.y;
+			x=mapx*32;y=mapx*32;
+	//		v=XTiledMap.toScreenCoordinate(v.x, v.y);
+		}
+		init();
+	}
+	
+	private void init() {
 		runAction(AForever.$(ASequence.$(
 				ACall.$(new ICallFunc() {
 					
@@ -113,19 +130,7 @@ public class Hero extends ASprite{
 				}),
 				AWaitByTag.actionWithTag(G.TAG.AM_MOVE)
 				)));
-		init();
-	}
-	
-	private void init() {
-		tmx=G.tmx;
-		Vector2 v;
-		sx=160-16;sy=120-24;
-		if (G.hasmap){
-			v=tmx.getStartPointIndex();
-			mapx=(int)v.x;mapy=(int)v.y;
-			x=mapx*32;y=mapx*32;
-	//		v=XTiledMap.toScreenCoordinate(v.x, v.y);
-		}
+		
 	}
 	
 	public void startMove(int dir){
@@ -151,10 +156,44 @@ public class Hero extends ASprite{
 		}
 		float ax=x-sx-ox;float ay=y-sy-oy;
 		ox=x-sx;oy=y-sy;
+		//forward();
 		getStage().getCamera().translate(new Vector3(ax,ay,0));
 		getStage().getCamera().update();
 		getStage().getCamera().apply(Gdx.gl10);
 		//System.out.println(getStage().getCamera().position);			
+	}
+	
+	/**向指定方向前进*/
+	public void forward(G.TAG dir){
+		if (G.lockInput) return;
+		direction=G.parseDirection(dir);
+		int gx=mapx,gy=mapy;
+		switch(dir){
+		case DIR_DOWN:gy=mapy-1;break;
+		case DIR_LEFT:gx=mapx-1;break;
+		case DIR_RIGHT:gx=mapx+1;break;
+		case DIR_UP:gy=mapy+1;break;
+		}
+		final int GX=gx,GY=gy;
+		if (tmx.getTile(gx, gy)==null||!tmx.getTile(gx, gy).getIsAvaliable()) return;
+		G.lockInput=true;
+		runAction(ASequence.$(
+				move[G.parseDirection(dir)],
+				ACall.$(new ICallFunc() {
+					public void onCall(Object[] params) {
+						mapx=GX;mapy=GY;
+						G.lockInput=false;
+						if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
+						if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
+						lx=mapx;ly=mapy;
+					}
+				})
+				));
+	}
+	
+	/**向当前方向前进*/
+	public void forward(){
+		forward(G.parseDirection(curdirection));
 	}
 
 	 

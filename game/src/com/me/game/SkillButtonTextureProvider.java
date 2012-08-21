@@ -15,11 +15,11 @@ public class SkillButtonTextureProvider {
 	
 	public TextureRegion getTexture(G.TAG tag, boolean active){
 		switch(tag){
-		case SKILL_FREEZE:
-		case SKILL_THAW:
-		case SKILL_JUMP:
-		case SKILL_PULL:
-		case SKILL_PUSH:if (active) return texs[0][0]; else return texs[0][1];
+		case SKILL_FREEZE:if(active) return texs[1][3]; else return texs[0][3];
+		case SKILL_THAW:if(active) return texs[3][0]; else return texs[2][0];
+		case SKILL_JUMP:if(active) return texs[1][2]; else return texs[0][2];
+		case SKILL_PULL:if(active) return texs[1][1]; else return texs[0][1];
+		case SKILL_PUSH:if (active) return texs[1][0]; else return texs[0][0];
 		}
 		return null;
 	}

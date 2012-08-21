@@ -1,6 +1,5 @@
 package com.me.aaction;
 
-import com.me.game.G;
 
 public class AAction {
 	public static boolean showlog = true;
