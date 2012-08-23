@@ -29,5 +29,9 @@ public interface IGObject {
 	boolean getIsAvaliableForObject();
 
 	TAG getId();
+	
+	public void remove();
+	
+	public void forward(final TAG dir);
 
 }

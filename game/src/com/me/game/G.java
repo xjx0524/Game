@@ -14,7 +14,8 @@ public final class G {
 		SKILL_PUSH, SKILL_PULL, SKILL_JUMP, SKILL_FREEZE, SKILL_THAW, SKILL_FOOTSTEP,
 		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,
 		GEN_STAY, GEN_PUSH, GEN_PULL,
-		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL};
+		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL,
+		TILE_GROUND1,TILE_GROUND2,TILE_PEDAL,TILE_WATER,TILE_STREAM,TILE_SAND,TILE_TELEPORT,TILE_HOLE,TILE_ICE};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		
@@ -45,7 +46,11 @@ public final class G {
 		public final static String OArg1="Arg1";
 		public final static String OArg2="Arg2";
 		public final static String OArg3="Arg3";
-		public final static String OArg4="Arg4";	
+		public final static String OArg4="Arg4";
+		public final static String DIR_LEFT="left";
+		public final static String DIR_RIGHT="right";
+		public final static String DIR_UP="up";
+		public final static String DIR_DOWN="down";
 	}
 	public static int parseDirection(TAG tag) {
 		switch (tag){

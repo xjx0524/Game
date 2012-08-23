@@ -42,6 +42,7 @@ public class Hero extends ASprite{
 	private float ox;
 	public Skill skill = new Skill();
 	public G.TAG skillindex = G.TAG.SKILL_NULL;
+	public boolean lock = false;
 	private int lx = 0,ly = 0;
 
 	Hero(){
@@ -135,7 +136,10 @@ public class Hero extends ASprite{
 	
 	public void startMove(int dir){
 		direction=dir;
-		ismoving=true;
+		if (!lock)
+			ismoving=true;
+		else 
+			ismoving=false;
 	}
 	
 	public void stopMove(){

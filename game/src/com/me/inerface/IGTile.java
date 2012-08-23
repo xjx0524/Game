@@ -3,6 +3,7 @@ package com.me.inerface;
 import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
+import com.me.game.G;
 
 /**瓦片*/
 
@@ -53,6 +54,8 @@ public interface IGTile {
 
 	/**获取该瓦片属性*/
 	public Map<String, String> getProperties();
+	
+	public G.TAG getTag();
 
 
 

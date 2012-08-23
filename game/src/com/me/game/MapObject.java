@@ -140,7 +140,7 @@ public class MapObject extends ASprite implements IGObject {
 		switch((G.TAG)skill.getIndex()){
 		default:return;
 		case SKILL_FOOTSTEP:footstepUnactive(skill);break;
-		}	
+		}
 	}
 	
 	public void forward(final TAG dir){
@@ -156,6 +156,7 @@ public class MapObject extends ASprite implements IGObject {
 						case DIR_UP:gy=mapy+1;break;
 						}
 						boolean b=(tmx.getTile(gx, gy)!=null)&&(tmx.getTile(gx, gy).getIsAvaliable());
+						if (b) tmx.getTile(mapx, mapy).unactive(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
 						if (!b) lock=false;
 						return !b;
 					}				
@@ -166,7 +167,7 @@ public class MapObject extends ASprite implements IGObject {
 						mapx=gx;mapy=gy;
 						x=mapx*32;y=mapy*32;
 						lock=false;
-						tmx.getTile(mapx, mapy).active(new Skill(G.TAG.SKILL_OBJECTMOVEDON));					
+						tmx.getTile(mapx, mapy).active(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));					
 					}
 				})
 				));
