@@ -19,6 +19,7 @@ public class XTiledLoader {
 		xmap.map = TiledLoader.createMap(tmxFile);
 		xmap.atlas = new TileAtlas(xmap.map, Gdx.files.internal(atlasPath));
 		xmap.tileMapRenderer = new TileMapRenderer(xmap.map, xmap.atlas, 10, 10);
+		xmap.maxTileId = xmap.map.tileSets.get(xmap.map.tileSets.size()-1).firstgid;
 		
 		xmap.tiles = new XTile[xmap.map.layers.size()][xmap.map.height][xmap.map.width];
 		for (int layer = 0; layer < xmap.map.layers.size(); layer++)

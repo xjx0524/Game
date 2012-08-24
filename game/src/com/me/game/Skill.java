@@ -15,21 +15,21 @@ public class Skill implements IGSkill {
 	private Object[] params;
 	private Hero hero;
 	
-	Skill(){
+	public Skill(){
 		super();
 		this.index=G.TAG.SKILL_NULL;
 		this.params=null;
 		hero=G.hero;
 	}
 	
-	Skill(G.TAG index,Object...params){
+	public Skill(G.TAG index,Object...params){
 		super();
 		this.index=index;
 		this.params=params;
 		hero=null;
 	}
 	
-	Skill(G.TAG index,String[] params){
+	public Skill(G.TAG index,String[] params){
 		super();
 		this.index=index;
 		this.params=params;

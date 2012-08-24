@@ -2,7 +2,7 @@ package com.me.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.inerface.IGObjectGroup;
-import com.me.inerface.IGTMX;
+import com.me.map.XTiledMap;
 
 public final class G {
 	
@@ -12,10 +12,20 @@ public final class G {
 		AM_MOVE,
 		DIR_LEFT, DIR_RIGHT, DIR_DOWN, DIR_UP,
 		SKILL_PUSH, SKILL_PULL, SKILL_JUMP, SKILL_FREEZE, SKILL_THAW, SKILL_FOOTSTEP,
-		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,
+		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,SKILL_TELE,
 		GEN_STAY, GEN_PUSH, GEN_PULL,
 		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL,
-		TILE_GROUND1,TILE_GROUND2,TILE_PEDAL,TILE_WATER,TILE_STREAM,TILE_SAND,TILE_TELEPORT,TILE_HOLE,TILE_ICE};
+		TILE_GROUND1,TILE_GROUND2,TILE_WATER,TILE_TELEPORT,TILE_HOLE,TILE_ICE,
+		TILE_PEDAL_1,TILE_PEDAL_2,TILE_PEDAL_3,TILE_PEDAL_4,TILE_PEDAL_DOWN,
+		TILE_STREAM_U1,TILE_STREAM_U2,TILE_STREAM_U3,TILE_STREAM_U4,
+		TILE_STREAM_D1,TILE_STREAM_D2,TILE_STREAM_D3,TILE_STREAM_D4,
+		TILE_STREAM_L1,TILE_STREAM_L2,TILE_STREAM_L3,TILE_STREAM_L4,
+		TILE_STREAM_R1,TILE_STREAM_R2,TILE_STREAM_R3,TILE_STREAM_R4,
+		TILE_SAND_U1,TILE_SAND_U2,TILE_SAND_U3,TILE_SAND_U4,
+		TILE_SAND_D1,TILE_SAND_D2,TILE_SAND_D3,TILE_SAND_D4,
+		TILE_SAND_L1,TILE_SAND_L2,TILE_SAND_L3,TILE_SAND_L4,
+		TILE_SAND_R1,TILE_SAND_R2,TILE_SAND_R3,TILE_SAND_R4,
+		};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		
@@ -24,7 +34,7 @@ public final class G {
 	public static boolean hasmap = true;
 	public static boolean lockInput = false;
 	public static Hero hero;
-	public static IGTMX tmx;
+	public static XTiledMap tmx;
 	public static MapObjectTextureProvider motp;
 	public static SkillButtonTextureProvider sbtp;
 	public static SpriteBatch batch;

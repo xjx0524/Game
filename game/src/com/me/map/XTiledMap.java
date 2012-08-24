@@ -25,6 +25,7 @@ public class XTiledMap implements IGTMX {
 	private Vector2 origin;
 	public Vector2 startPos;
 	private static Vector2 originc = new Vector2();
+	public int maxTileId;
 	
 	public XTiledMap() {
 		objectGroup=G.objectGroup;
