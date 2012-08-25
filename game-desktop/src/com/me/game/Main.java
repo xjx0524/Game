@@ -9,8 +9,7 @@ public class Main {
 		cfg.title = "game";
 		cfg.useGL20 = false;
 		cfg.width = 320;
-		cfg.height = 240;
-		
-		new LwjglApplication(new GameMain(), cfg);
+		cfg.height = 240;	 
+		new LwjglApplication(new GameMain(),cfg);
 	}
 }

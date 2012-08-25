@@ -124,9 +124,8 @@ public class Skill implements IGSkill {
 		case DIR_RIGHT:gx=mapx+1;break;
 		case DIR_UP:gy=mapy+1;break;
 		}
-		if (G.tmx.getObject(gx, gy)==null||G.tmx.getObject(gx, gy).getId()!=TAG.OBJ_ICE)return;
-		G.tmx.getObject(gx, gy).active(new Skill(TAG.SKILL_THAW));	
-		
+		if (G.tmx.getTile(gx, gy)==null) return;
+		G.tmx.getTile(gx, gy).active(new Skill(TAG.SKILL_THAW));		
 	}
 
 	private static void freeze() {
@@ -139,14 +138,16 @@ public class Skill implements IGSkill {
 		case DIR_RIGHT:gx=mapx+1;break;
 		case DIR_UP:gy=mapy+1;break;
 		}
-		if (G.tmx.getObject(gx, gy)==null||G.tmx.getObject(gx, gy).getId()!=TAG.OBJ_WATER)return;
-		G.tmx.getObject(gx, gy).active(new Skill(TAG.SKILL_FREEZE));	
+		if (G.tmx.getTile(gx, gy)==null) return;
+		G.tmx.getTile(gx, gy).active(new Skill(TAG.SKILL_FREEZE));	
 	}
 
 	static private void jump() {
+		if (G.hero.lock) return;
 		int mapx=G.hero.mapx;
 		int mapy=G.hero.mapy;
 		int gx=mapx,gy=mapy;
+		G.tmx.getTile(mapx, mapy).unactive(G.hero.skill.generate(G.TAG.GEN_STAY));
 		switch(G.parseDirection(G.hero.curdirection)){
 		case DIR_DOWN:gy=mapy-1;break;
 		case DIR_LEFT:gx=mapx-1;break;
@@ -192,6 +193,8 @@ public class Skill implements IGSkill {
 						G.hero.mapx=GX;
 						G.hero.mapy=GY;
 						G.tmx.getTile(GX, GY).active(G.hero.skill.generate(G.TAG.GEN_STAY));
+						G.hero.lx=G.hero.mapx;
+						G.hero.ly=G.hero.mapy;
 					}
 				})
 				));

@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.aaction.AActionInterval;
-import com.me.aaction.ABreakIf;
 import com.me.aaction.ACall;
 import com.me.aaction.ADelay;
 import com.me.aaction.AFiniteTimeAction;
@@ -20,8 +19,6 @@ import com.me.aaction.ASequence;
 import com.me.aaction.ASprite;
 import com.me.aaction.AWaitByTag;
 import com.me.aaction.ICallFunc;
-import com.me.aaction.IIfFunc;
-import com.me.game.G.TAG;
 import com.me.inerface.IGTMX;
 
 public class Hero extends ASprite{
@@ -43,7 +40,9 @@ public class Hero extends ASprite{
 	public Skill skill = new Skill();
 	public G.TAG skillindex = G.TAG.SKILL_NULL;
 	public boolean lock = false;
-	private int lx = 0,ly = 0;
+	public boolean lockInput = false;
+	int lx = 0;
+	int ly = 0;
 
 	Hero(){
 		super();
@@ -75,7 +74,8 @@ public class Hero extends ASprite{
 		runAction(AForever.$(ASequence.$(
 				ACall.$(new ICallFunc() {
 					
-					public void onCall(Object[] params) {						
+					public void onCall(Object[] params) {	
+						if (lock) ismoving=false;
 						AFiniteTimeAction a;
 						curdirection=direction;
 						iscurmoving=ismoving;
@@ -89,15 +89,13 @@ public class Hero extends ASprite{
 							case 3:gy=mapy+1;break;							
 							}
 							
-							a=ASequence.$(move[direction],ACall.$(new ICallFunc() {
-								 
+							a=ASequence.$(move[direction],ACall.$(new ICallFunc() {								 
 								public void onCall(Object[] params) {
 									if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
 									if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
 									lx=mapx;ly=mapy;
 								}
 							}));
-							
 							if (G.hasmap){
 								if (tmx.getTile(gx, gy)!=null){
 									if (!tmx.getTile(gx, gy).getIsAvaliable()){
@@ -111,10 +109,15 @@ public class Hero extends ASprite{
 										case 2:kx=mapx+1;break;
 										case 3:ky=mapy+1;break;							
 										}
-										tmx.getTile(kx, ky).active(skill.generate(G.TAG.GEN_PULL));
-										
 										mapx=gx;mapy=gy;
-										if (G.log) System.out.println("HeroPos:("+mapx+","+mapy+")");
+										tmx.getTile(kx, ky).active(skill.generate(G.TAG.GEN_PULL));									
+										if (G.log) {
+											String s="HeroPos:("+mapx+","+mapy+") "+tmx.getTile(mapx, mapy).getTag();
+											if (tmx.getObject(mapx, mapy)!=null) s+=tmx.getObject(mapx, mapy).getId();
+											else s+=" No Object";
+											s+=" CameraPos("+G.hero.getStage().getCamera().position.x+","+G.hero.getStage().getCamera().position.y+")";
+											System.out.println(s);										
+										}
 									}
 								}else{
 									a=ADelay.$(0.1f);			
@@ -151,7 +154,6 @@ public class Hero extends ASprite{
 		super.draw(batch,parentAlpha);
 		//if (G.hasmap)tmx.setPosition(ox-ax,oy-ay);
 		time+=Gdx.graphics.getDeltaTime();
-		//System.out.println("("+ax+","+ay+")");
 		if (iscurmoving)
 			batch.draw(ani[curdirection].getKeyFrame(time,true), x, y);
 		else{
@@ -163,13 +165,12 @@ public class Hero extends ASprite{
 		//forward();
 		getStage().getCamera().translate(new Vector3(ax,ay,0));
 		getStage().getCamera().update();
-		getStage().getCamera().apply(Gdx.gl10);
-		//System.out.println(getStage().getCamera().position);			
+		getStage().getCamera().apply(Gdx.gl10);		
 	}
 	
 	/**向指定方向前进*/
 	public void forward(G.TAG dir){
-		if (G.lockInput) return;
+		if (this.lockInput) return;
 		direction=G.parseDirection(dir);
 		int gx=mapx,gy=mapy;
 		switch(dir){
@@ -180,13 +181,13 @@ public class Hero extends ASprite{
 		}
 		final int GX=gx,GY=gy;
 		if (tmx.getTile(gx, gy)==null||!tmx.getTile(gx, gy).getIsAvaliable()) return;
-		G.lockInput=true;
+		mapx=GX;mapy=GY;
+		this.lockInput=G.lockInput=true;
 		runAction(ASequence.$(
 				move[G.parseDirection(dir)],
 				ACall.$(new ICallFunc() {
-					public void onCall(Object[] params) {
-						mapx=GX;mapy=GY;
-						G.lockInput=false;
+					public void onCall(Object[] params) {						
+						Hero.this.lockInput=G.lockInput=false;
 						if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
 						if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
 						lx=mapx;ly=mapy;
@@ -230,7 +231,17 @@ public class Hero extends ASprite{
 		}
 		return true;
 	}
-	
-	
+
+	@Override
+	public TextureRegion getTextureRegion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTextureRegion(TextureRegion textureRegion) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

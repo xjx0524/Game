@@ -3,6 +3,7 @@ package com.me.game;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.game.G.TAG;
 import com.me.inerface.IGObject;
 import com.me.inerface.IGObjectGroup;
 import com.me.inerface.IGTMX;
@@ -28,6 +29,9 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	}
 	
 	private void sort(){
+		G.hero.y-=17;
+		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy)).y-=18;
+		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy-1).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)).y-=18;
 		heap.init(getActors().size());
 		while (!getActors().isEmpty()){
 			Actor o = getActors().get(0);
@@ -37,7 +41,10 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 		//if (G.log) System.out.print(heap.len);
 		while (!heap.isEmpty()) 
 			addActor(heap.pop());
-		heap.fin();		
+		heap.fin();	
+		G.hero.y+=17;
+		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy)).y+=18;
+		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy-1).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)).y+=18;
 	}
 
  
@@ -96,15 +103,15 @@ final class Heap{
 		Actor o=a[1]=a[len--];
 		if (len==0) return e;
 		int i=1;
-		while ((i<<1)<len&&(a[i].y<a[i<<1].y||a[i].y<a[i<<1+1].y)){
-			if (a[i<<1].y<a[i<<1+1].y){
+		while ((i<<1)<len&&(a[i].y<a[i<<1].y||a[i].y<a[(i<<1)+1].y)){
+			if (a[i<<1].y>a[(i<<1)+1].y){
 				a[i]=a[i<<1];
 				i=i<<1;
 				a[i]=o;
 			}else
 			{
-				a[i]=a[i<<1];
-				i=i<<1+1;
+				a[i]=a[(i<<1)+1];
+				i=(i<<1)+1;
 				a[i]=o;
 			}
 		}

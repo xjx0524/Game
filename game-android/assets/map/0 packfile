@@ -1,9 +1,9 @@
 
-31.png
+01.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-3
+0
   rotate: false
   xy: 2, 2
   size: 32, 32

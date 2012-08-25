@@ -29,7 +29,8 @@ public class Toggle{
 			a.add(s);
 			++i;
 		}
-		t=(String[])a.toArray();
+		if (a.size()==0) t=null;
+		else t=(String[])a.toArray();
 		
 		//x,y,arg,skill;
 		s=obj.properties.get("count");
@@ -56,27 +57,41 @@ public class Toggle{
 				a.clear();
 				int j=0;
 				while ((s=obj.properties.get("arg"+i+j))!=null){a.add(s);++j;};
+				if (a.size()==0) arg[i]=null;else
 				arg[i]=(String[])a.toArray();
 			}
 						
 		}
 		
 		//activecount
-		s=obj.properties.get("activeCount");
+		s=obj.properties.get("ActiveCount");
 		if (s==null) activeCount=1; else activeCount=Integer.decode(s);		
 	}
 	
 	public void add(){
 		++count;
+		if (G.log) System.out.println("Toggle "+name+" added");
 		if (count>=activeCount) active();
 	}
 	
 	public void sub(){
-		--count;	
+		--count;
+		if (G.log) System.out.println("Toggle "+name+" subtracted");
+		if (count<activeCount) unactive();
 	}
 	
+	private void unactive() {
+		if (G.log) System.out.println("Toggle "+name+" unactived");
+		if (t!=null) for (String p:t){group.find(p).sub();}
+		for (int i=0;i<skill.length;++i){
+			IGTile tile=G.tmx.getTile(x[i], y[i]);
+			if (tile!=null) tile.unactive(new Skill(skill[i],arg[i]));
+		}
+	}
+
 	private void active() {
-		for (String p:t){group.find(p).add();}
+		if (G.log) System.out.println("Toggle "+name+" actived");
+		if (t!=null) for (String p:t){group.find(p).add();}
 		for (int i=0;i<skill.length;++i){
 			IGTile tile=G.tmx.getTile(x[i], y[i]);
 			if (tile!=null) tile.active(new Skill(skill[i],arg[i]));

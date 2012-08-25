@@ -2,10 +2,10 @@ package com.me.map;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.me.game.G;
 import com.me.game.G.TAG;
+import com.me.game.MapObject;
 import com.me.game.Skill;
 import com.me.inerface.IGObject;
 import com.me.inerface.IGSkill;
@@ -54,6 +54,8 @@ public class XTile implements IGTile {
 	
 	private void setTile(TAG tag,Object... arg){
 		map.map.layers.get(0).tiles[map.map.height-1-y][x]=id=toId(tag);
+		type=tag;
+		if (G.log) System.out.println("Change to "+tag+" id is "+id);
 		if (arg.length==0) return;
 		if (arg.length>this.arg.length) this.arg=arg;
 		else
@@ -70,7 +72,7 @@ public class XTile implements IGTile {
 	}
 
 	private static TAG parseName(String name) {
-		//if (name==null) return G.TAG.TILE_GROUND1;
+		if (name==null) return G.TAG.TILE_OTHER;
 		if (name.equalsIgnoreCase("ground1"))	return G.TAG.TILE_GROUND1; else
 		if (name.equalsIgnoreCase("ground2"))	return G.TAG.TILE_GROUND2; else
 		if (name.equalsIgnoreCase("pedal"))		return G.TAG.TILE_PEDAL_1; else
@@ -136,7 +138,7 @@ public class XTile implements IGTile {
 		if (getObject()!=null)	getObject().active(skill);
 		switch ((G.TAG)skill.getIndex()){
 		case SKILL_MOVE:pedalActive();lockHero();heroFlow();teleportActive();heroSlide();break;
-		case SKILL_OBJECTMOVEDON:pedalActive();objectMovedIn();flow();slide(skill);break;
+		case SKILL_OBJECTMOVEDON:pedalActive();objectMovedIn();flow();slide(skill);teleObject();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
 		case SKILL_TELE:pedalActive();lockHero();heroFlow();heroSlide();break;
@@ -145,12 +147,23 @@ public class XTile implements IGTile {
 		}		
 	}
 
+	private void teleObject() {
+		if (!check(TAG.TILE_TELEPORT)) return;
+		if (getObject()==null){
+			if (G.log) System.out.println("!!!!!!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!");
+		}
+		else{
+			MapObject o=(MapObject)getObject();
+			o.mapx = (Integer)arg[0];
+			o.mapy = (Integer)arg[1];
+			o.x=o.mapx*32;
+			o.y=o.mapy*32;
+		}
+	}
+
 	private void heroSlide() {
 		if (!check(TAG.TILE_ICE)) return;
-		if (getObject()==null){
-			if (G.log) System.out.println("!!!!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!");
-		}else
-			G.hero.forward();		
+		G.hero.forward();		
 	}
 
 	private void slide(IGSkill skill) {
@@ -163,10 +176,9 @@ public class XTile implements IGTile {
 
 	private void thaw() {
 		if (!check(TAG.TILE_ICE)) return;
-		String s=getProperties().get(G.Label.Arg0);
-		if (s==null)
+		if (arg==null||arg[0]==null)			
 			setTile(TAG.TILE_WATER);
-		else
+		else{			
 			switch((TAG)arg[0]){
 			case DIR_DOWN:	setTile(TAG.TILE_STREAM_D1);break;
 			case DIR_UP:	setTile(TAG.TILE_STREAM_U1);break;
@@ -174,6 +186,8 @@ public class XTile implements IGTile {
 			case DIR_RIGHT:	setTile(TAG.TILE_STREAM_R1);break;
 			default:		setTile(TAG.TILE_WATER);break;
 			}
+		}
+		active(new Skill(TAG.SKILL_OBJECTMOVEDON,TAG.DIR_NONE));
 	}
 
 	private void freeze() {
@@ -185,17 +199,16 @@ public class XTile implements IGTile {
 	}
 
 	private void teleportActive() {
-		if (!check(TAG.TILE_TELEPORT)) return;
-		float x=G.hero.x;
-		float y=G.hero.y;
-		G.hero.mapx=(int)Float.parseFloat(getProperties().get(G.Label.Arg0));
-		G.hero.mapy=(int)Float.parseFloat(getProperties().get(G.Label.Arg1));
-		G.hero.x=32*G.hero.mapx;
-		G.hero.y=32*G.hero.mapy;
-		G.hero.getStage().getCamera().translate(G.hero.x-x, G.hero.y-y, 0);
-		G.hero.getStage().getCamera().update();
-		G.hero.getStage().getCamera().apply(Gdx.gl10);
+		if (!check(TAG.TILE_TELEPORT)) return;	
+		G.hero.mapx=(Integer)arg[0];
+		G.hero.mapy=(Integer)arg[1];
+		G.hero.x=(Integer)arg[0]*32;
+		G.hero.y=(Integer)arg[1]*32;
+		//G.hero.getStage().getCamera().translate(new Vector3(G.hero.x-x, G.hero.y-y, 0));
+		//G.hero.getStage().getCamera().update();
+		//G.hero.getStage().getCamera().apply(Gdx.gl10);
 		G.tmx.getTile(G.hero.mapx, G.hero.mapy).active(new Skill(TAG.SKILL_TELE));
+		if (G.log) System.out.println("Tele to ("+G.hero.mapx+","+G.hero.mapy+") CameraPos("+G.hero.getStage().getCamera().position.x+","+G.hero.getStage().getCamera().position.y+")");
 	}
 
 	private void flow() {
@@ -240,6 +253,7 @@ public class XTile implements IGTile {
 			case OBJ_ICE:tag=TAG.TILE_ICE;break;
 			case OBJ_PULLABLE:tag=TAG.TILE_GROUND1;break;
 			case OBJ_PUSHABLE:tag=TAG.TILE_GROUND1;break;
+			case OBJ_WATER:o.remove();return;
 			default:if (G.log) System.out.print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
 			}
 			setTile(tag);
@@ -255,19 +269,18 @@ public class XTile implements IGTile {
 
 	private void pedalActive() {
 		if (!check(TAG.TILE_PEDAL_1,TAG.TILE_PEDAL_2,TAG.TILE_PEDAL_3,TAG.TILE_PEDAL_4)) return;
-		G.toggleGroup.find(getProperties().get(G.Label.Arg0)).add();
+		G.toggleGroup.find((String)arg[1]).add();
 		setTile(TAG.TILE_PEDAL_DOWN);
 	}
 
 	@Override
 	public void unactive(IGSkill skill) {
 		if(G.log) System.out.println("UnactiveTile:("+x+","+y+") by "+skill);
+		if (getObject()!=null) getObject().unactive(skill);
 		switch ((G.TAG)skill.getIndex()){
 		case SKILL_MOVE:pedalUnactive();break;
 		case SKILL_OBJECTMOVEDON:pedalUnactive();break;
 		case SKILL_PUSH:
-		default:
-			if (getObject()!=null)	getObject().active(skill);
 		}
 	}
 	
@@ -276,7 +289,7 @@ public class XTile implements IGTile {
 	private void pedalUnactive() {
 		if (getTag()!=TAG.TILE_PEDAL_DOWN) return;
 		if ((Integer)arg[0]!=2) return;
-		G.toggleGroup.find(getProperties().get(G.Label.Arg1)).sub();
+		G.toggleGroup.find((String)arg[1]).sub();
 		switch((Integer)arg[2]){
 		case 1:setTile(TAG.TILE_PEDAL_1);break;
 		case 2:setTile(TAG.TILE_PEDAL_2);break;
@@ -293,7 +306,7 @@ public class XTile implements IGTile {
 	@Override
 	public boolean getIsAvaliableForObject() {
 		//String s=map.map.getTileProperty(id, G.Label.Avaliable);
-		return getIsAvaliable();
+		return getTag()==TAG.TILE_HOLE||(getIsAvaliable()&&getTag()!=TAG.TILE_GROUND2);
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class ASprite extends Actor {
@@ -93,6 +94,9 @@ public abstract class ASprite extends Actor {
 		actionsWillRemove.clear();
 		actionsWillAdd.clear();		
 	}
+	
+	public abstract TextureRegion getTextureRegion();
+	public abstract void setTextureRegion(TextureRegion textureRegion);
 
 }
 

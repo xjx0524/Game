@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -81,9 +82,14 @@ public class Handle extends Stage {
 				this.y=16;
 				G.hero.keyUp(Input.Keys.DPAD_LEFT);
 			}
+
+			public TextureRegion getTextureRegion() {return null;	}
+			public void setTextureRegion(TextureRegion textureRegion) {}
 		};
 		
 		outer=new ASprite(){
+			public TextureRegion getTextureRegion() {return null;	}
+			public void setTextureRegion(TextureRegion textureRegion) {}
 			Texture tex;
 			{
 				tex=new Texture("handle_outer.png");

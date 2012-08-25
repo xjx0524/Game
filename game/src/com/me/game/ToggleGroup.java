@@ -29,7 +29,7 @@ public class ToggleGroup {
 	
 	public Toggle find(String name){
 		for (Toggle p:list){
-			if (p.name==name)
+			if (p.name.equals(name))
 				return p;
 		}
 		return null;

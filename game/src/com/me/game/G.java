@@ -9,13 +9,18 @@ public final class G {
 	public static final int ScreenHeight = 240;
 	public static final int ScreenWidth  = 320;
 	public static enum TAG{
-		AM_MOVE,
-		DIR_LEFT, DIR_RIGHT, DIR_DOWN, DIR_UP,
+		AM_MOVE, AA_DOOROPEN, AA_DOORCLOSE,
+		
+		DIR_LEFT, DIR_RIGHT, DIR_DOWN, DIR_UP, DIR_NONE,
+		
 		SKILL_PUSH, SKILL_PULL, SKILL_JUMP, SKILL_FREEZE, SKILL_THAW, SKILL_FOOTSTEP,
 		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,SKILL_TELE,
+		
 		GEN_STAY, GEN_PUSH, GEN_PULL,
+		
 		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL,
-		TILE_GROUND1,TILE_GROUND2,TILE_WATER,TILE_TELEPORT,TILE_HOLE,TILE_ICE,
+		
+		TILE_GROUND1,TILE_GROUND2,TILE_WATER,TILE_TELEPORT,TILE_HOLE,TILE_ICE,TILE_OTHER,
 		TILE_PEDAL_1,TILE_PEDAL_2,TILE_PEDAL_3,TILE_PEDAL_4,TILE_PEDAL_DOWN,
 		TILE_STREAM_U1,TILE_STREAM_U2,TILE_STREAM_U3,TILE_STREAM_U4,
 		TILE_STREAM_D1,TILE_STREAM_D2,TILE_STREAM_D3,TILE_STREAM_D4,
@@ -24,7 +29,7 @@ public final class G {
 		TILE_SAND_U1,TILE_SAND_U2,TILE_SAND_U3,TILE_SAND_U4,
 		TILE_SAND_D1,TILE_SAND_D2,TILE_SAND_D3,TILE_SAND_D4,
 		TILE_SAND_L1,TILE_SAND_L2,TILE_SAND_L3,TILE_SAND_L4,
-		TILE_SAND_R1,TILE_SAND_R2,TILE_SAND_R3,TILE_SAND_R4,
+		TILE_SAND_R1,TILE_SAND_R2,TILE_SAND_R3,TILE_SAND_R4, 
 		};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
@@ -51,7 +56,7 @@ public final class G {
 		public final static String Arg3="Arg3";
 		public final static String Arg4="Arg4";
 		public final static String OName="Name";
-		public final static String OAvaliable="Avaliable";
+		public final static String OAvaliable="OAvaliable";
 		public final static String OArg0="Arg0";
 		public final static String OArg1="Arg1";
 		public final static String OArg2="Arg2";

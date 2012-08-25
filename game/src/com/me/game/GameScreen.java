@@ -44,6 +44,11 @@ public class GameScreen implements Screen,InputProcessor{
 		skillstg.addActor(b);
 		b=new SkillButton(G.TAG.SKILL_JUMP, SkillButton.TYPE.ACTIVE);
 		skillstg.addActor(b);
+		b=new SkillButton(G.TAG.SKILL_FREEZE, SkillButton.TYPE.ACTIVE);
+		skillstg.addActor(b);
+		b=new SkillButton(G.TAG.SKILL_THAW, SkillButton.TYPE.ACTIVE);
+		skillstg.addActor(b);
+		
 		skillstg.oganize();
 	}
 

@@ -2,12 +2,16 @@ package com.me.game;
 
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.aaction.AAction;
 import com.me.aaction.AActionInterval;
+import com.me.aaction.AAnimate;
 import com.me.aaction.ABreakIf;
 import com.me.aaction.ACall;
 import com.me.aaction.AMoveBy;
@@ -29,7 +33,7 @@ public class MapObject extends ASprite implements IGObject {
 	public IGTMX tmx;
 	private TextureRegion tex;
 	public boolean avaliable;
-	public Object[] arg;
+	public Object[] arg=new Object[5];
 	public String name;
 	public MapObjectGroup group;
 	private boolean lock = false;
@@ -81,12 +85,12 @@ public class MapObject extends ASprite implements IGObject {
 	private void parseArg(Map<String, String> map) {
 		switch(id){
 		default:return;
-		case OBJ_DOOR:	if (map.get(G.Label.OArg0)=="1") arg[0]=1; else
-						if (map.get(G.Label.OArg0)=="2") arg[0]=2; else
-						if (map.get(G.Label.OArg0)=="3") arg[0]=3; 
+		case OBJ_DOOR:	if (map.get(G.Label.OArg0).equals("1")) arg[0]=1; else
+						if (map.get(G.Label.OArg0).equals("2")) arg[0]=2; else
+						if (map.get(G.Label.OArg0).equals("3")) arg[0]=3; 
 						arg[1]=false;break;
-		case OBJ_ICE:
-		case OBJ_WATER: arg[0]=G.TAG.valueOf(map.get(G.Label.OArg0));break;
+	//	case OBJ_ICE:
+	//	case OBJ_WATER: arg[0]=G.TAG.valueOf(map.get(G.Label.OArg0));break;
 		}		
 	}
 	
@@ -126,13 +130,14 @@ public class MapObject extends ASprite implements IGObject {
 		if(G.log) System.out.println("ActiveObject:("+mapx+","+mapy+") by "+skill);
 		switch((G.TAG)skill.getIndex()){
 		default:return;
-		case SKILL_PULL:
+		case SKILL_PULL:pulledActive(skill);break;
 		case SKILL_PUSH:pushedActive(skill);break;
 		case SKILL_FOOTSTEP:footstepActive(skill);break;
-		case SKILL_FREEZE:freeze(skill);
-		case SKILL_THAW:thaw(skill);
+		case SKILL_FREEZE:freeze(skill);break;
+		case SKILL_THAW:thaw(skill);break;
 		}		
 	}
+
 
 	@Override
 	public void unactive(IGSkill skill) {
@@ -144,6 +149,7 @@ public class MapObject extends ASprite implements IGObject {
 	}
 	
 	public void forward(final TAG dir){
+		G.lockInput=true;
 		lock=true;
 		runAction(ASequence.$(
 				ABreakIf.$(new IIfFunc(){
@@ -155,9 +161,10 @@ public class MapObject extends ASprite implements IGObject {
 						case DIR_RIGHT:gx=mapx+1;break;
 						case DIR_UP:gy=mapy+1;break;
 						}
-						boolean b=(tmx.getTile(gx, gy)!=null)&&(tmx.getTile(gx, gy).getIsAvaliable());
+						boolean b=(tmx.getTile(gx, gy)!=null)&&(tmx.getTile(gx, gy).getIsAvaliableForObject());
+						b=b&&(gx!=G.hero.mapx||gy!=G.hero.mapy);
 						if (b) tmx.getTile(mapx, mapy).unactive(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
-						if (!b) lock=false;
+						if (!b) G.lockInput=lock=false;
 						return !b;
 					}				
 				}),
@@ -166,7 +173,7 @@ public class MapObject extends ASprite implements IGObject {
 					public void onCall(Object[] params) {
 						mapx=gx;mapy=gy;
 						x=mapx*32;y=mapy*32;
-						lock=false;
+						G.lockInput=lock=false;
 						tmx.getTile(mapx, mapy).active(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));					
 					}
 				})
@@ -174,27 +181,38 @@ public class MapObject extends ASprite implements IGObject {
 	}
 	
 	private void pushedActive(final IGSkill skill) {
-		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE&&id!=TAG.OBJ_BLOCK) return;
+		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE) return;
+		forward((TAG)skill.getParams()[0]);
+	}
+	
+	private void pulledActive(final IGSkill skill) {
+		if (id!=TAG.OBJ_PULLABLE) return;
 		forward((TAG)skill.getParams()[0]);
 	}
 	
 	private void footstepActive(IGSkill skill) {
 		if (id!=TAG.OBJ_DOOR) return;
 		switch ((Integer)arg[0]){
-		case 1:tex=G.motp.getTexture("door_open");arg[1]=true;break;
-		case 2:tex=G.motp.getTexture("door_open");arg[1]=true;break;
+		case 1:animate(TAG.AA_DOOROPEN);arg[1]=true;break;
+		case 2:animate(TAG.AA_DOOROPEN);arg[1]=true;break;
 		case 3:	arg[1]=!(Boolean)arg[1];
-				if ((Boolean)arg[1]) tex=G.motp.getTexture("door_open");
-				else tex=G.motp.getTexture("door");
+				if ((Boolean)arg[1]) {
+					animate(TAG.AA_DOOROPEN);
+				}else{
+					animate(TAG.AA_DOORCLOSE);
+				}
 				break;			
-		}					
+		}
+		avaliable=(Boolean)arg[1];
 	}
 
 	private void footstepUnactive(IGSkill skill) {
 		if (id!=TAG.OBJ_DOOR) return;
 		if ((Integer)arg[0]==1) {
-			tex=G.motp.getTexture("door");
+			//tex=G.motp.getTexture("door");
+			animate(TAG.AA_DOORCLOSE);
 			arg[1]=false;
+			avaliable=false;
 		}		
 	}
 	
@@ -204,6 +222,7 @@ public class MapObject extends ASprite implements IGObject {
 	}
 	
 	private void thaw(IGSkill skill) {
+		if (getId()!=TAG.OBJ_ICE) return;
 		name="water";
 		id=TAG.OBJ_WATER;
 		tex=G.motp.getTexture(name);
@@ -211,9 +230,40 @@ public class MapObject extends ASprite implements IGObject {
 	}
 
 	private void freeze(IGSkill skill) {
+		if (getId()!=TAG.OBJ_WATER) return;
 		name="ice";
 		id=TAG.OBJ_ICE;
 		tex=G.motp.getTexture(name);
 		avaliable=false;
 	}
+	
+	void animate(TAG tag){
+		AAnimate a;
+		switch(tag){
+		case AA_DOORCLOSE:a=AAnimate.$(new Animation(0.1f, G.motp.getTexture("door3"),G.motp.getTexture("door2"),G.motp.getTexture("door1"),G.motp.getTexture("door")));break;
+		case AA_DOOROPEN :a=AAnimate.$(new Animation(0.1f, G.motp.getTexture("door1"),G.motp.getTexture("door2"),G.motp.getTexture("door3"),G.motp.getTexture("door_open")));break;
+		default: return;
+		}
+		G.lockInput=lock=true;
+		runAction(ASequence.$(
+				a,
+				ACall.$(new ICallFunc() {
+					public void onCall(Object[] params) {
+						G.lockInput=lock=false;
+					}
+				})
+				));
+	}
+
+	@Override
+	public TextureRegion getTextureRegion() {
+		return tex;
+	}
+
+	@Override
+	public void setTextureRegion(TextureRegion textureRegion) {
+		tex=textureRegion;		
+	}
+
+
 }
