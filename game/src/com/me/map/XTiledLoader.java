@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileAtlas;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
 import com.badlogic.gdx.math.Vector2;
-
 import com.me.game.G;
 
 public class XTiledLoader {
@@ -18,7 +17,7 @@ public class XTiledLoader {
 		xmap = new XTiledMap();
 		xmap.map = TiledLoader.createMap(tmxFile);
 		xmap.atlas = new TileAtlas(xmap.map, Gdx.files.internal(atlasPath));
-	//	xmap.tileMapRenderer = new TileMapRenderer(xmap.map, xmap.atlas, 10, 10);
+//		xmap.tileMapRenderer = new TileMapRenderer(xmap.map, xmap.atlas, 10, 10);
 		xmap.maxTileId = xmap.map.tileSets.get(xmap.map.tileSets.size()-1).firstgid;
 		
 		xmap.tiles = new XTile[xmap.map.layers.size()][xmap.map.height][xmap.map.width];

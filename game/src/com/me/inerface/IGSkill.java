@@ -12,5 +12,6 @@ public interface IGSkill {
 	
 	/**获取技能参数*/
 	public Object[] getParams();
+	public boolean getIsForce();
 
 }

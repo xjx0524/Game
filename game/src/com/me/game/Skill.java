@@ -2,6 +2,8 @@ package com.me.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.me.aaction.ACall;
+import com.me.aaction.AEaseOutIn;
+import com.me.aaction.AMoveBy;
 import com.me.aaction.AParabola;
 import com.me.aaction.ASequence;
 import com.me.aaction.ICallFunc;
@@ -14,6 +16,7 @@ public class Skill implements IGSkill {
 	private Object index;
 	private Object[] params;
 	private Hero hero;
+	private boolean force = false;
 	
 	public Skill(){
 		super();
@@ -29,10 +32,27 @@ public class Skill implements IGSkill {
 		hero=null;
 	}
 	
+	public Skill(G.TAG index,boolean force, Object...params){
+		super();
+		this.index=index;
+		this.params=params;
+		this.force=force;
+		hero=null;
+	}
+	
 	public Skill(G.TAG index,String[] params){
 		super();
 		this.index=index;
 		this.params=params;
+		hero=null;
+		parse();
+	}
+	
+	public Skill(G.TAG index,boolean force, String[] params){
+		super();
+		this.index=index;
+		this.params=params;
+		this.force=force;
 		hero=null;
 		parse();
 	}
@@ -112,6 +132,7 @@ public class Skill implements IGSkill {
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
 		}
+		G.tmx.save();
 	}
 
 	private static void thaw() {
@@ -143,7 +164,6 @@ public class Skill implements IGSkill {
 	}
 
 	static private void jump() {
-		if (G.hero.lock) return;
 		int mapx=G.hero.mapx;
 		int mapy=G.hero.mapy;
 		int gx=mapx,gy=mapy;
@@ -198,6 +218,15 @@ public class Skill implements IGSkill {
 					}
 				})
 				));
+	}
+
+	@Override
+	public boolean getIsForce() {
+		return force;
+	}
+	
+	static private void jump2(){
+		G.hero.runAction(AEaseOutIn.$(AMoveBy.$(1, 0, 64)));
 	}
 }
 ;

@@ -34,7 +34,7 @@
   </tile>
   <tile id="15">
    <properties>
-    <property name="Avaliable" value="false"/>
+    <property name="Avaliable" value="true"/>
     <property name="type" value="hole"/>
    </properties>
   </tile>
@@ -90,8 +90,8 @@
   </object>
   <object height="32" name="Door" width="32" x="320" y="128">
    <properties>
-    <property name="Arg0" value="1"/>
-    <property name="OAvaliable" value="false"/>
+    <property name="OArg0" value="1"/>
+    <property name="OAvaliable" value="true"/>
    </properties>
   </object>
  </objectgroup>
@@ -99,8 +99,8 @@
   <object height="4" name="toggle" width="15" x="437" y="297">
    <properties>
     <property name="ActiveCount" value="1"/>
-	<property name="skill0" value="SKILL_FOOTSTEP"/>
     <property name="count" value="1"/>
+	<property name="skill0" value="SKILL_FOOTSTEP"/>
     <property name="x0" value="10"/>
     <property name="y0" value="5"/>
    </properties>

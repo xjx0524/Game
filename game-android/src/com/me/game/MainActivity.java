@@ -19,6 +19,6 @@ public class MainActivity extends AndroidApplication {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	System.exit(0);
+    	//System.exit(0);
     }
 }

@@ -1,5 +1,7 @@
 package com.me.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,7 +14,7 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	
 	private IGTMX tmx;
 	private Heap heap=new Heap();
-	
+	private ArrayList<ObjectSaveStruct> ss=new ArrayList<ObjectSaveStruct>();
 	
 	public MapObjectGroup() {
 		super(G.ScreenWidth, G.ScreenHeight, true, G.batch);
@@ -30,11 +32,23 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	
 	private void sort(){
 		G.hero.y-=17;
-		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy)).y-=18;
-		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy-1).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)).y-=18;
+		ArrayList<MapObject> door=new ArrayList<MapObject>(); 
+		ArrayList<MapObject> water=new ArrayList<MapObject>();
 		heap.init(getActors().size());
 		while (!getActors().isEmpty()){
 			Actor o = getActors().get(0);
+			if (o instanceof MapObject){
+				if (((MapObject)o).getId()==TAG.OBJ_DOOR)
+				{
+					door.add((MapObject)o);
+					o.y-=1;
+				}
+				if (((MapObject)o).getId()==TAG.OBJ_WATER)
+				{
+					water.add((MapObject)o);
+					o.y+=33;
+				}
+			}
 			heap.push(o);
 			o.remove();
 		}
@@ -43,8 +57,12 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 			addActor(heap.pop());
 		heap.fin();	
 		G.hero.y+=17;
-		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy)).y+=18;
-		if (G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)!=null&&G.tmx.getObject(G.hero.mapx, G.hero.mapy-1).getId()==TAG.OBJ_DOOR)((MapObject)G.tmx.getObject(G.hero.mapx, G.hero.mapy-1)).y+=18;
+		for (MapObject p:door) p.y+=1;
+		for (MapObject p:water) p.y-=33;
+		door.clear();
+		water.clear();
+		door=null;
+		water=null;
 	}
 
  
@@ -56,19 +74,54 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	}
 
 	 
-	public IGObject getObject(int x, int y) {
+	public IGObject[] getObject(int x, int y) {
+		if (getActors().size()==0) return null;
+		ArrayList<IGObject> ret=new ArrayList<IGObject>(); 
+		ret.clear();
 		for (Actor p:getActors()){
 			if (p instanceof MapObject){
 				if (((MapObject)p).mapx==x&&((MapObject)p).mapy==y){
-					return (MapObject)p;
+					if (((MapObject)p).getIsVisible()) 
+						ret.add((IGObject)p);
 				}
 			}
 		}
-		return null;
+		if (ret.size()==0)
+			return null;
+		else{
+			//G.Log("ObjectCount at("+x+","+y+"): "+ret.size());
+			IGObject[] r=new IGObject[ret.size()];
+			for (int i=0;i<ret.size();++i) r[i]=ret.get(i);
+			return r;
+		}
+			
+	}
+	
+	public void init(){
+		if (getActors().size()==0) return;
+		for (Actor p:getActors()){
+			if (p instanceof MapObject)
+				G.tmx.getTile(((MapObject)p).mapx,((MapObject)p).mapy).active(new Skill(TAG.SKILL_OBJECTMOVEDON,TAG.DIR_NONE));
+		}
+	}
+	
+	public void save(){
+		ss.clear();
+		for (Actor p:getActors()){
+			if (p instanceof MapObject){
+				ss.add(new ObjectSaveStruct((MapObject)p));
+			}
+		}
+	}
+	
+	public void load(){
+		if (ss==null||ss.size()==0) return;
+		for (ObjectSaveStruct p:ss){
+			p.load();
+		}
 	}
 
 }
-
 
 final class Heap{
 	

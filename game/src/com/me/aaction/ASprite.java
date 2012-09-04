@@ -3,7 +3,6 @@ package com.me.aaction;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +13,7 @@ public abstract class ASprite extends Actor {
 	List<AAction> actions;
 	List<AAction> actionsWillRemove;
 	List<AAction> actionsWillAdd;
+	public boolean visibleForPlayer = true;
 	void removeAction(AAction a){
 		actionsWillRemove.add(a);
 	}
@@ -81,6 +81,8 @@ public abstract class ASprite extends Actor {
 	
 	public void draw(SpriteBatch batch, float parentAlpha,Texture tex) {
 		doAlter(batch,parentAlpha);
+		if (!visibleForPlayer) return;
+		batch.setColor(color);
 		batch.draw (tex, x, y, originX, originY, width, height, scaleX,
 				 scaleY, rotation, 0, 0, tex.getWidth(),  tex.getHeight(),  false,  false);
 		//Log.i("", "DrawParam:"+ x+","+ y+"," +originX+","+ originY+","+ width+","+ height+","+ scaleX+",\n"+

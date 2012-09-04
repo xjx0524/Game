@@ -40,5 +40,13 @@ public class AParabola extends AActionInterval {
 		}
 	}
 	
+	static public float getTopTime(ASprite pTarget,float topy,float gy){
+		//G.Log("topTime "+b+"/"+k+"="+b/k);
+		float _sy=pTarget.y;
+		float _b=(float)Math.sqrt(topy-_sy);
+		float _k=(float)(Math.sqrt(topy-gy)+_b);
+		return _b/_k;
+	}
+	
 
 }

@@ -11,9 +11,17 @@ public interface IGObjectGroup {
 	void draw();
 	
 	/**获取相应坐标上的放置物（地图坐标）*/
-	IGObject getObject(int x,int y);
+	IGObject[] getObject(int x,int y);
 	
 	/**获取相机*/
 	Camera getCamera();
+	
+	public void init();
+
+	public void save();
+
+	public void load();
+
+	void dispose();
 
 }

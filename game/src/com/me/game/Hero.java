@@ -10,15 +10,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.aaction.AActionInterval;
+import com.me.aaction.ABlink;
 import com.me.aaction.ACall;
 import com.me.aaction.ADelay;
+import com.me.aaction.AFadeOut;
 import com.me.aaction.AFiniteTimeAction;
 import com.me.aaction.AForever;
 import com.me.aaction.AMoveBy;
+import com.me.aaction.AScaleTo;
 import com.me.aaction.ASequence;
+import com.me.aaction.ASpawn;
 import com.me.aaction.ASprite;
 import com.me.aaction.AWaitByTag;
 import com.me.aaction.ICallFunc;
+import com.me.game.G.TAG;
+import com.me.inerface.IGObject;
 import com.me.inerface.IGTMX;
 
 public class Hero extends ASprite{
@@ -30,24 +36,30 @@ public class Hero extends ASprite{
 	int curdirection = 0;
 	private boolean ismoving = false;
 	private boolean iscurmoving = false;
-	private Texture tex;
 	private IGTMX tmx;
 	public int mapx,mapy;
 	private float sy;
 	private float sx;
 	private float oy;
 	private float ox;
+	private int lstablex,lstabley;
 	public Skill skill = new Skill();
 	public G.TAG skillindex = G.TAG.SKILL_NULL;
-	public boolean lock = false;
+	/**½ûÖ¹ÒÆ¶¯*/
 	public boolean lockInput = false;
 	int lx = 0;
 	int ly = 0;
+	private TAG state = TAG.HS_ALIVE;
 
 	Hero(){
 		super();
+		rotation=0;
+		height=48;
+		width=32;
+		originX=16;
+		originY=16;
 		G.hero=this;
-		tex=new Texture("hero.png");
+		Texture tex=new Texture("hero.png");
 		TextureRegion[][] texs=TextureRegion.split(tex, 32, 48);
 		move[0]=AMoveBy.$(0.5f, 0,-32);
 		move[1]=AMoveBy.$(0.5f, -32,0);
@@ -57,6 +69,7 @@ public class Hero extends ASprite{
 		for (int i=0;i<4;++i){
 			ani[i]=new Animation(0.25f,texs[i]);
 		}
+		
 
 		tmx=G.tmx;
 		Vector2 v;
@@ -75,7 +88,17 @@ public class Hero extends ASprite{
 				ACall.$(new ICallFunc() {
 					
 					public void onCall(Object[] params) {	
-						if (lock) ismoving=false;
+						if (lockInput) ismoving=false;
+						switch(state){
+						case HS_DEAD:relive();break;
+						case HS_ALIVE:if (lockInput) break;
+							if (lstablex!=mapx||lstabley!=mapy){
+								lstablex=mapx;lstabley=mapy;
+								if (tmx!=null)	tmx.save();
+							}
+							break;
+						case HS_RELIVING:break;
+						}
 						AFiniteTimeAction a;
 						curdirection=direction;
 						iscurmoving=ismoving;
@@ -113,7 +136,8 @@ public class Hero extends ASprite{
 										tmx.getTile(kx, ky).active(skill.generate(G.TAG.GEN_PULL));									
 										if (G.log) {
 											String s="HeroPos:("+mapx+","+mapy+") "+tmx.getTile(mapx, mapy).getTag();
-											if (tmx.getObject(mapx, mapy)!=null) s+=tmx.getObject(mapx, mapy).getId();
+											if (tmx.getObject(mapx, mapy)!=null) 
+												for (IGObject p:tmx.getObject(mapx, mapy)) s+=p.getId()+",";
 											else s+=" No Object";
 											s+=" CameraPos("+G.hero.getStage().getCamera().position.x+","+G.hero.getStage().getCamera().position.y+")";
 											System.out.println(s);										
@@ -139,10 +163,8 @@ public class Hero extends ASprite{
 	
 	public void startMove(int dir){
 		direction=dir;
-		if (!lock)
-			ismoving=true;
-		else 
-			ismoving=false;
+		G.Log("----------------------------------------------------------("+lstablex+","+lstabley+")");
+		ismoving=true;			
 	}
 	
 	public void stopMove(){
@@ -154,10 +176,16 @@ public class Hero extends ASprite{
 		super.draw(batch,parentAlpha);
 		//if (G.hasmap)tmx.setPosition(ox-ax,oy-ay);
 		time+=Gdx.graphics.getDeltaTime();
-		if (iscurmoving)
-			batch.draw(ani[curdirection].getKeyFrame(time,true), x, y);
-		else{
-			batch.draw(ani[curdirection].getKeyFrame(0),x,y);
+		if (iscurmoving){
+			if (visibleForPlayer){
+				batch.setColor(color);
+				batch.draw(ani[curdirection].getKeyFrame(time,true), x, y, originX, originY, width, height,scaleX, scaleY, rotation);
+			}
+		}else{
+			if (visibleForPlayer){
+				batch.setColor(color);
+				batch.draw(ani[curdirection].getKeyFrame(time,true), x, y, originX, originY, width, height,scaleX, scaleY, rotation);
+			}
 			time=0;
 		}
 		float ax=x-sx-ox;float ay=y-sy-oy;
@@ -191,6 +219,7 @@ public class Hero extends ASprite{
 						if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
 						if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
 						lx=mapx;ly=mapy;
+						G.Log("StablePoint("+lstablex+","+lstabley+")");
 					}
 				})
 				));
@@ -242,6 +271,40 @@ public class Hero extends ASprite{
 	public void setTextureRegion(TextureRegion textureRegion) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void dead() {
+		state=TAG.HS_DEAD;
+		lockInput=G.lockInput=true;
+	}
+	
+	public void relive(){
+		state=TAG.HS_RELIVING;
+		tmx.load();
+		runAction(
+				ASequence.$(
+						ASpawn.$(
+								AFadeOut.$(1f),
+								AScaleTo.$(0.5f,0.5f,0.5f),
+								AMoveBy.$(1f, 0, -10)
+								),
+						ADelay.$(0.5f),
+						ASpawn.$(
+							ABlink.$(1.5f, 6),
+							ACall.$(new ICallFunc() {
+							public void onCall(Object[] params) {
+								color.a=1.0f;
+								state=TAG.HS_ALIVE;
+								mapx=lstablex;mapy=lstabley;
+								x=mapx*32;y=mapy*32;	
+								G.lockInput=lockInput=false;
+								scaleX=scaleY=1;
+							}
+						}))
+						));
+		//runAction(ABlink.$(0.5f, 6));
+		//color.a=0.0f;
+		//action(FadeIn.$(5.0f));
 	}
 
 }

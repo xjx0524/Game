@@ -1,5 +1,6 @@
 package com.me.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class XTiledMap implements IGTMX {
 	public Vector2 startPos;
 	private static Vector2 originc = new Vector2();
 	public int maxTileId;
+	private ArrayList<TileSaveStruct> ss=new ArrayList<TileSaveStruct>();
 	
 	public XTiledMap() {
 		objectGroup=G.objectGroup;
@@ -64,7 +66,7 @@ public class XTiledMap implements IGTMX {
 	}
 
 	@Override
-	public IGObject getObject(int x, int y) {
+	public IGObject[] getObject(int x, int y) {
 		return objectGroup.getObject(x, y);
 	}
 
@@ -75,8 +77,13 @@ public class XTiledMap implements IGTMX {
 	
 	@Override
 	public void draw(OrthographicCamera c) {
-		new TileMapRenderer(map, atlas, 10, 10).render(c);
-		if (objectGroup==null) objectGroup=G.objectGroup;
+		(tileMapRenderer=new TileMapRenderer(map, atlas, 10, 10)).render(c);
+		tileMapRenderer.dispose();
+		tileMapRenderer=null;
+		if (objectGroup==null){
+			objectGroup=G.objectGroup;
+			objectGroup.init();
+		}
 		objectGroup.draw();
 		originc.x=G.ScreenWidth/2-c.position.x;
 		originc.y=G.ScreenHeight/2-c.position.y;
@@ -122,5 +129,24 @@ public class XTiledMap implements IGTMX {
 	public List<TiledObject> getToggles() {
 		if (map.objectGroups==null||map.objectGroups.size()<2||map.objectGroups.get(1)==null) return null;
 		return map.objectGroups.get(1).objects;
+	}
+	
+	public void save(){
+		if (objectGroup==null) return;
+		G.Log("Save");
+		ss.clear();
+		for (int x=0;x<map.width;++x)
+			for (int y=0;y<map.height;++y){
+				ss.add(new TileSaveStruct(getTile(x, y)));
+			}
+		objectGroup.save();
+	}
+	
+	public void load(){
+		G.Log("Load");
+		for (TileSaveStruct t:ss){
+			t.load();
+		}
+		objectGroup.load();
 	}
 }

@@ -1,7 +1,5 @@
 package com.me.game;
 
-import com.me.aaction.*;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -10,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.aaction.AForever;
+import com.me.aaction.ARotateBy;
+import com.me.aaction.ASprite;
 
 public class Handle extends Stage {
 	

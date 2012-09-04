@@ -23,9 +23,7 @@ public class ASequence extends AActionInterval {
 			   ||curAction instanceof AContinueIf&&((AContinueIf)curAction).shouldcontinue)
 			{
 				if (curAction instanceof ABreakIf) shouldbreak=true;
-				stop();
-					
-					
+				stop();					
 			}else
 			{
 				if (iter.hasNext())	{
@@ -34,7 +32,8 @@ public class ASequence extends AActionInterval {
 						//	Log.e("AAction","Sequence meet null action!")
 					;else
 						curAction.startWithTarget(getTarget());
-				}else stop();
+				}else 
+					stop();
 			}
 		}
 		

@@ -49,7 +49,7 @@ public interface  IGTMX {
 	 * @param x x坐标（地图逻辑坐标）
 	 * @param y y坐标（地图逻辑坐标）
 	 * @return 获取的放置物*/
-	public IGObject getObject(int x,int y);
+	public IGObject[] getObject(int x,int y);
 	
 	/**获取该瓦片属性(包括放置物属性)*/
 	public Map<String,String> getProperties();
@@ -58,5 +58,9 @@ public interface  IGTMX {
 	
 	public List<TiledObject> getObjects();
 	public List<TiledObject> getToggles();
+
+	public void save();
+
+	public void load();
 
 }

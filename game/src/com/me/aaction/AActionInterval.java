@@ -2,8 +2,7 @@ package com.me.aaction;
 
 public class AActionInterval extends AFiniteTimeAction {
 	
-	private float elapsed;
-	public float getElapsed() { return elapsed; }  
+	float elapsed;  
 	
 	@Override
 	public String discribtion() { return "AActionInterval";	}
@@ -18,7 +17,7 @@ public class AActionInterval extends AFiniteTimeAction {
 			stop();
 			return;
 		}
-		float tt=(elapsed+0.0f)/getDuration();	
+		float tt=(float)(((double)elapsed)/getDuration());	
 		update(tt);
 	}
 	

@@ -72,12 +72,14 @@ public class Toggle{
 		++count;
 		if (G.log) System.out.println("Toggle "+name+" added");
 		if (count>=activeCount) active();
+		G.tmx.save();
 	}
 	
 	public void sub(){
 		--count;
 		if (G.log) System.out.println("Toggle "+name+" subtracted");
 		if (count<activeCount) unactive();
+		G.save();
 	}
 	
 	private void unactive() {
@@ -90,7 +92,7 @@ public class Toggle{
 	}
 
 	private void active() {
-		if (G.log) System.out.println("Toggle "+name+" actived");
+		if (G.log) System.out.println("Toggle "+name+" actived, "+skill.length+" tiles to be actived.");
 		if (t!=null) for (String p:t){group.find(p).add();}
 		for (int i=0;i<skill.length;++i){
 			IGTile tile=G.tmx.getTile(x[i], y[i]);

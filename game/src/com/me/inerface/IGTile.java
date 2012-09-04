@@ -47,7 +47,7 @@ public interface IGTile {
 	public Vector2 getIndex();
 	
 	/**获取该瓦片上面的放置物*/
-	public IGObject getObject();
+	public IGObject[] getObject();
 	
 	/**获取其所属耳朵IGTMX*/
 	public IGTMX getTMX();
@@ -56,7 +56,5 @@ public interface IGTile {
 	public Map<String, String> getProperties();
 	
 	public G.TAG getTag();
-
-
 
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.map.XFlowManager;
 import com.me.map.XTiledLoader;
 import com.me.map.XTiledMap;
 
@@ -19,6 +20,7 @@ public class GameScreen implements Screen,InputProcessor{
 	Actor hero;
 	SpriteBatch batch;
 	XTiledMap tmx;
+	XFlowManager flowManager;
 	
 	public void show() {
 		dispose();
@@ -26,9 +28,12 @@ public class GameScreen implements Screen,InputProcessor{
 		G.motp=new MapObjectTextureProvider();
 		G.batch=batch = new SpriteBatch();
 		
-		tmx=XTiledLoader.initMap(Gdx.files.internal("map/1.tmx"), "map/");
+		
+		
+		tmx=XTiledLoader.initMap(Gdx.files.internal("map2/2.tmx"), "map2/");
 		
 		G.toggleGroup=new ToggleGroup();
+		flowManager=new XFlowManager(0.1f);
 		
 		stg=new MapObjectGroup();
 		hero=new Hero();
@@ -57,12 +62,16 @@ public class GameScreen implements Screen,InputProcessor{
 		if (stg!=null) stg.dispose();
 		if (handlestg!=null) handlestg.dispose();
 		if (skillstg!=null) skillstg.dispose();
+		if (batch!=null) batch.dispose();
+		if (G.objectGroup!=null) G.objectGroup.dispose();
+		if (G.skillBottonGroup!=null) G.skillBottonGroup.dispose();
+		flowManager=null;
 		stg=null;
 		handlestg=null;
 		skillstg=null;
 		tmx=null;
 		hero=null;
-		batch=null;
+		batch=null;		
 		G.hero=null;
 		G.tmx=null;
 		G.motp=null;
@@ -70,6 +79,8 @@ public class GameScreen implements Screen,InputProcessor{
 		G.objectGroup=null;
 		G.skillBottonGroup=null;
 		G.toggleGroup=null;
+		G.batch=null;
+		G.flowmanager=null;
 	}
 
 	public void hide() {
@@ -82,6 +93,8 @@ public class GameScreen implements Screen,InputProcessor{
 
 	public void render(float t) {
 		Gdx.gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		flowManager.update();
+		stg.act(Gdx.graphics.getDeltaTime());
 		tmx.draw((OrthographicCamera)stg.getCamera());
 		handlestg.draw();
 		skillstg.draw();

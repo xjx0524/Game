@@ -1,6 +1,8 @@
 package com.me.aaction;
 
 
+
+
 public class AAction {
 	public static boolean showlog = true;
 	
@@ -16,14 +18,14 @@ public class AAction {
 		mTarget.addAction(this);
 		running=true;
 		stoped = false;
-		//if (G.log)	System.out.println(mTarget+"Start: "+discribtion());
+	//	G.Log(mTarget+"|Start: "+this);
 	}
 	
 	public void stop(){
 		running = false;
 		mTarget.removeAction(this);
 		stoped = true;
-		//if (G.log)	System.out.println(mTarget+ "Stop : "+discribtion());
+	//	G.Log(mTarget+"|Stop : "+this);
 	}
 	
 	public void setTag(Object tag){ mTag = tag; }
@@ -40,6 +42,11 @@ public class AAction {
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();		
+	}
+	
+	@Override
+	public String toString() {
+		return discribtion();
 	}
 	
 	

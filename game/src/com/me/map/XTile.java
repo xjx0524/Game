@@ -37,14 +37,10 @@ public class XTile implements IGTile {
 	private void parseArg() {
 		switch(type){
 		default:return;
-		case TILE_PEDAL_1:arg=new Object[]
-				{Integer.decode(map.map.getTileProperty(id, G.Label.Arg0)),map.map.getTileProperty(id, G.Label.Arg1),1};break;
-		case TILE_PEDAL_2:arg=new Object[]
-				{Integer.decode(map.map.getTileProperty(id, G.Label.Arg0)),map.map.getTileProperty(id, G.Label.Arg1),2};break;
-		case TILE_PEDAL_3:arg=new Object[]
-				{Integer.decode(map.map.getTileProperty(id, G.Label.Arg0)),map.map.getTileProperty(id, G.Label.Arg1),3};break;
-		case TILE_PEDAL_4:arg=new Object[]
-				{Integer.decode(map.map.getTileProperty(id, G.Label.Arg0)),map.map.getTileProperty(id, G.Label.Arg1),4};break;
+		case TILE_PEDAL_1:case TILE_PEDAL_2:case TILE_PEDAL_3:case TILE_PEDAL_4:case TILE_PEDAL:
+			arg=new Object[]
+			{Integer.decode(map.map.getTileProperty(id, G.Label.Arg0)),map.map.getTileProperty(id, G.Label.Arg1),id,type};
+			break;
 		case TILE_TELEPORT:arg=new Object[]{
 							Integer.parseInt(map.map.getTileProperty(id, G.Label.Arg0)),
 							Integer.parseInt(map.map.getTileProperty(id, G.Label.Arg1))
@@ -52,21 +48,44 @@ public class XTile implements IGTile {
 		}			
 	}
 	
-	private void setTile(TAG tag,Object... arg){
+	void setTile(TAG tag,Object... arg){
+		G.flowmanager.remove(this);
 		map.map.layers.get(0).tiles[map.map.height-1-y][x]=id=toId(tag);
 		type=tag;
+		G.flowmanager.add(this);
 		if (G.log) System.out.println("Change to "+tag+" id is "+id);
-		if (arg.length==0) return;
-		if (arg.length>this.arg.length) this.arg=arg;
+		if (arg.length==0) {
+			G.save();
+			return;
+		}
+		if (this.arg==null||arg.length>this.arg.length) this.arg=arg;
 		else
 			for (int i=0;i<arg.length;++i){
 				this.arg[i]=arg[i];
 			}
+		G.save();
 	}
 	
-	private boolean check(TAG...tags){
+	void setTile(int id,TAG tag,Object... arg){
+		G.flowmanager.remove(this);
+		map.map.layers.get(0).tiles[map.map.height-1-y][x]=this.id=id;
+		type=tag;
+		G.flowmanager.add(this);
+		if (G.log) System.out.println("Change to "+tag+" id is "+id);
+		if (arg.length==0) {
+			G.save();
+			return;
+		}if (this.arg==null||arg.length>this.arg.length) this.arg=arg;
+		else
+			for (int i=0;i<arg.length;++i){
+				this.arg[i]=arg[i];
+			}
+		G.save();
+	}
+	
+	boolean check(TAG...tags){
 		for (TAG p:tags){
-			if (getTag()==p) return true; 
+			if (getTag()==p) return true;
 		}
 		return false;
 	}
@@ -75,20 +94,52 @@ public class XTile implements IGTile {
 		if (name==null) return G.TAG.TILE_OTHER;
 		if (name.equalsIgnoreCase("ground1"))	return G.TAG.TILE_GROUND1; else
 		if (name.equalsIgnoreCase("ground2"))	return G.TAG.TILE_GROUND2; else
-		if (name.equalsIgnoreCase("pedal"))		return G.TAG.TILE_PEDAL_1; else
+		if (name.equalsIgnoreCase("pedal"))		return G.TAG.TILE_PEDAL; else
 		if (name.equalsIgnoreCase("pedal1"))	return G.TAG.TILE_PEDAL_1; else
 		if (name.equalsIgnoreCase("pedal2"))	return G.TAG.TILE_PEDAL_1; else
 		if (name.equalsIgnoreCase("pedal3"))	return G.TAG.TILE_PEDAL_1; else
 		if (name.equalsIgnoreCase("pedal4"))	return G.TAG.TILE_PEDAL_1; else
 		if (name.equalsIgnoreCase("water"))		return G.TAG.TILE_WATER; else
 		if (name.equalsIgnoreCase("stream_u"))	return G.TAG.TILE_STREAM_U1; else
+		if (name.equalsIgnoreCase("stream_u1"))	return G.TAG.TILE_STREAM_U1; else
+		if (name.equalsIgnoreCase("stream_u2"))	return G.TAG.TILE_STREAM_U2; else
+		if (name.equalsIgnoreCase("stream_u3"))	return G.TAG.TILE_STREAM_U3; else
+		if (name.equalsIgnoreCase("stream_u4"))	return G.TAG.TILE_STREAM_U4; else
 		if (name.equalsIgnoreCase("stream_d"))	return G.TAG.TILE_STREAM_D1; else
+		if (name.equalsIgnoreCase("stream_d1"))	return G.TAG.TILE_STREAM_D1; else
+		if (name.equalsIgnoreCase("stream_d2"))	return G.TAG.TILE_STREAM_D2; else
+		if (name.equalsIgnoreCase("stream_d3"))	return G.TAG.TILE_STREAM_D3; else
+		if (name.equalsIgnoreCase("stream_d4"))	return G.TAG.TILE_STREAM_D4; else
 		if (name.equalsIgnoreCase("stream_l"))	return G.TAG.TILE_STREAM_L1; else
+		if (name.equalsIgnoreCase("stream_l1"))	return G.TAG.TILE_STREAM_L1; else
+		if (name.equalsIgnoreCase("stream_l2"))	return G.TAG.TILE_STREAM_L2; else
+		if (name.equalsIgnoreCase("stream_l3"))	return G.TAG.TILE_STREAM_L3; else
+		if (name.equalsIgnoreCase("stream_l4"))	return G.TAG.TILE_STREAM_L4; else
 		if (name.equalsIgnoreCase("stream_r"))	return G.TAG.TILE_STREAM_R1; else
+		if (name.equalsIgnoreCase("stream_r1"))	return G.TAG.TILE_STREAM_R1; else
+		if (name.equalsIgnoreCase("stream_r2"))	return G.TAG.TILE_STREAM_R2; else
+		if (name.equalsIgnoreCase("stream_r3"))	return G.TAG.TILE_STREAM_R3; else
+		if (name.equalsIgnoreCase("stream_r4"))	return G.TAG.TILE_STREAM_R4; else
 		if (name.equalsIgnoreCase("sand_u"))	return G.TAG.TILE_SAND_U1; else
+		if (name.equalsIgnoreCase("sand_u1"))	return G.TAG.TILE_SAND_U1; else
+		if (name.equalsIgnoreCase("sand_u2"))	return G.TAG.TILE_SAND_U2; else
+		if (name.equalsIgnoreCase("sand_u3"))	return G.TAG.TILE_SAND_U3; else
+		if (name.equalsIgnoreCase("sand_u4"))	return G.TAG.TILE_SAND_U4; else
 		if (name.equalsIgnoreCase("sand_d"))	return G.TAG.TILE_SAND_D1; else
+		if (name.equalsIgnoreCase("sand_d1"))	return G.TAG.TILE_SAND_D1; else
+		if (name.equalsIgnoreCase("sand_d2"))	return G.TAG.TILE_SAND_D2; else
+		if (name.equalsIgnoreCase("sand_d3"))	return G.TAG.TILE_SAND_D3; else
+		if (name.equalsIgnoreCase("sand_d4"))	return G.TAG.TILE_SAND_D4; else
 		if (name.equalsIgnoreCase("sand_l"))	return G.TAG.TILE_SAND_L1; else
+		if (name.equalsIgnoreCase("sand_l1"))	return G.TAG.TILE_SAND_L1; else
+		if (name.equalsIgnoreCase("sand_l2"))	return G.TAG.TILE_SAND_L2; else
+		if (name.equalsIgnoreCase("sand_l3"))	return G.TAG.TILE_SAND_L3; else
+		if (name.equalsIgnoreCase("sand_l4"))	return G.TAG.TILE_SAND_L4; else
 		if (name.equalsIgnoreCase("sand_r"))	return G.TAG.TILE_SAND_R1; else
+		if (name.equalsIgnoreCase("sand_r1"))	return G.TAG.TILE_SAND_R1; else
+		if (name.equalsIgnoreCase("sand_r2"))	return G.TAG.TILE_SAND_R2; else
+		if (name.equalsIgnoreCase("sand_r3"))	return G.TAG.TILE_SAND_R3; else
+		if (name.equalsIgnoreCase("sand_r4"))	return G.TAG.TILE_SAND_R4; else
 		if (name.equalsIgnoreCase("teleport"))	return G.TAG.TILE_TELEPORT; else
 		if (name.equalsIgnoreCase("hole"))		return G.TAG.TILE_HOLE; else
 		if (name.equalsIgnoreCase("ice"))		return G.TAG.TILE_ICE; else
@@ -99,21 +150,49 @@ public class XTile implements IGTile {
 		switch(tag) {
 		default: return null;
 		case TILE_GROUND1: return "ground1"; 
-		case TILE_GROUND2: return "ground2"; 
+		case TILE_GROUND2: return "ground2";
+		case TILE_PEDAL	 : return "pedal";
 		case TILE_PEDAL_1: return "pedal1"; 
 		case TILE_PEDAL_2: return "pedal2";
 		case TILE_PEDAL_3: return "pedal3";
 		case TILE_PEDAL_4: return "pedal4";
 		case TILE_PEDAL_DOWN: return "pedaldown";
 		case TILE_WATER: return "water"; 
-		case TILE_STREAM_U1:case TILE_STREAM_U2:case TILE_STREAM_U3:case TILE_STREAM_U4: return "stream_u";
-		case TILE_STREAM_D1:case TILE_STREAM_D2:case TILE_STREAM_D3:case TILE_STREAM_D4: return "stream_d";
-		case TILE_STREAM_L1:case TILE_STREAM_L2:case TILE_STREAM_L3:case TILE_STREAM_L4: return "stream_l";
-		case TILE_STREAM_R1:case TILE_STREAM_R2:case TILE_STREAM_R3:case TILE_STREAM_R4: return "stream_r";
-		case TILE_SAND_U1:case TILE_SAND_U2:case TILE_SAND_U3:case TILE_SAND_U4: return "sand_u"; 
-		case TILE_SAND_D1:case TILE_SAND_D2:case TILE_SAND_D3:case TILE_SAND_D4: return "sand_d";
-		case TILE_SAND_L1:case TILE_SAND_L2:case TILE_SAND_L3:case TILE_SAND_L4: return "sand_l";
-		case TILE_SAND_R1:case TILE_SAND_R2:case TILE_SAND_R3:case TILE_SAND_R4: return "sand_r";
+		
+		case TILE_STREAM_U1:return "stream_u1";
+		case TILE_STREAM_U2:return "stream_u2";
+		case TILE_STREAM_U3:return "stream_u3";
+		case TILE_STREAM_U4:return "stream_u4";
+		case TILE_STREAM_D1:return "stream_d1";
+		case TILE_STREAM_D2:return "stream_d2";
+		case TILE_STREAM_D3:return "stream_d3";
+		case TILE_STREAM_D4:return "stream_d4";
+		case TILE_STREAM_L1:return "stream_l1";
+		case TILE_STREAM_L2:return "stream_l2";
+		case TILE_STREAM_L3:return "stream_l3";
+		case TILE_STREAM_L4:return "stream_l4";
+		case TILE_STREAM_R1:return "stream_r1";
+		case TILE_STREAM_R2:return "stream_r2";
+		case TILE_STREAM_R3:return "stream_r3";
+		case TILE_STREAM_R4:return "stream_r4";
+		
+		case TILE_SAND_U1:return "sand_u1";
+		case TILE_SAND_U2:return "sand_u2";
+		case TILE_SAND_U3:return "sand_u3";
+		case TILE_SAND_U4:return "sand_u4";
+		case TILE_SAND_D1:return "sand_d1";
+		case TILE_SAND_D2:return "sand_d2";
+		case TILE_SAND_D3:return "sand_d3";
+		case TILE_SAND_D4:return "sand_d4";
+		case TILE_SAND_L1:return "sand_l1";
+		case TILE_SAND_L2:return "sand_l2";
+		case TILE_SAND_L3:return "sand_l3";
+		case TILE_SAND_L4:return "sand_l4";
+		case TILE_SAND_R1:return "sand_r1";
+		case TILE_SAND_R2:return "sand_r2";
+		case TILE_SAND_R3:return "sand_r3";
+		case TILE_SAND_R4:return "sand_r4";
+		
 		case TILE_TELEPORT: return "teleport"; 
 		case TILE_HOLE: return "hole"; 
 		case TILE_ICE: return "ice";
@@ -134,14 +213,14 @@ public class XTile implements IGTile {
 	
 	@Override
 	public void active(IGSkill skill) {
-		if(G.log) System.out.println("ActiveTile:("+x+","+y+") by "+skill);
-		if (getObject()!=null)	getObject().active(skill);
+		if(G.log) System.out.println("ActiveTile:("+x+","+y+") "+type+ " by "+skill);
+		if (getObject()!=null)	for (IGObject p:getObject()) p.active(skill);
 		switch ((G.TAG)skill.getIndex()){
-		case SKILL_MOVE:pedalActive();lockHero();heroFlow();teleportActive();heroSlide();break;
+		case SKILL_MOVE:pedalActive();heroDead();heroFlow();teleportActive();heroSlide();break;
 		case SKILL_OBJECTMOVEDON:pedalActive();objectMovedIn();flow();slide(skill);teleObject();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
-		case SKILL_TELE:pedalActive();lockHero();heroFlow();heroSlide();break;
+		case SKILL_TELE:pedalActive();heroDead();heroFlow();heroSlide();break;
 		case SKILL_PUSH:
 		default:break;			
 		}		
@@ -153,11 +232,14 @@ public class XTile implements IGTile {
 			if (G.log) System.out.println("!!!!!!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!");
 		}
 		else{
-			MapObject o=(MapObject)getObject();
-			o.mapx = (Integer)arg[0];
-			o.mapy = (Integer)arg[1];
-			o.x=o.mapx*32;
-			o.y=o.mapy*32;
+			if(!G.tmx.getTile((Integer)arg[0], (Integer)arg[1]).getIsAvaliableForObject()) return;
+			for (IGObject p:getObject()){
+				MapObject o=(MapObject)p;				
+				o.mapx = (Integer)arg[0];
+				o.mapy = (Integer)arg[1];
+				o.x=o.mapx*32;
+				o.y=o.mapy*32;
+			}
 		}
 	}
 
@@ -171,7 +253,8 @@ public class XTile implements IGTile {
 		if (getObject()==null){
 			if (G.log) System.out.println("!!!!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!");
 		}else
-			getObject().forward((TAG)skill.getParams()[0]);
+			for (IGObject p:getObject())
+				p.forward((TAG)skill.getParams()[0]);
 	}
 
 	private void thaw() {
@@ -199,14 +282,12 @@ public class XTile implements IGTile {
 	}
 
 	private void teleportActive() {
-		if (!check(TAG.TILE_TELEPORT)) return;	
+		if (!check(TAG.TILE_TELEPORT)) return;
+		if(!G.tmx.getTile((Integer)arg[0], (Integer)arg[1]).getIsAvaliable()) return;
 		G.hero.mapx=(Integer)arg[0];
 		G.hero.mapy=(Integer)arg[1];
 		G.hero.x=(Integer)arg[0]*32;
 		G.hero.y=(Integer)arg[1]*32;
-		//G.hero.getStage().getCamera().translate(new Vector3(G.hero.x-x, G.hero.y-y, 0));
-		//G.hero.getStage().getCamera().update();
-		//G.hero.getStage().getCamera().apply(Gdx.gl10);
 		G.tmx.getTile(G.hero.mapx, G.hero.mapy).active(new Skill(TAG.SKILL_TELE));
 		if (G.log) System.out.println("Tele to ("+G.hero.mapx+","+G.hero.mapy+") CameraPos("+G.hero.getStage().getCamera().position.x+","+G.hero.getStage().getCamera().position.y+")");
 	}
@@ -225,7 +306,8 @@ public class XTile implements IGTile {
 		if (getObject()==null){
 			if (G.log) System.out.println("!!!!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!");
 		}else
-			getObject().forward(dir);
+			for (IGObject p:getObject())
+				p.forward(dir);
 	}
 
 	private void heroFlow() {
@@ -248,23 +330,26 @@ public class XTile implements IGTile {
 			if (G.log) System.out.print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");
 		}else{
 			TAG tag = null;
-			IGObject o=getObject();
-			switch(o.getId()){
-			case OBJ_ICE:tag=TAG.TILE_ICE;break;
-			case OBJ_PULLABLE:tag=TAG.TILE_GROUND1;break;
-			case OBJ_PUSHABLE:tag=TAG.TILE_GROUND1;break;
-			case OBJ_WATER:o.remove();return;
-			default:if (G.log) System.out.print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
+			for (IGObject o:getObject()){
+			//IGObject o=p;
+				switch(o.getId()){
+				case OBJ_ICE:tag=TAG.TILE_ICE;break;
+				case OBJ_PULLABLE:tag=TAG.TILE_GROUND1;break;
+				case OBJ_PUSHABLE:tag=TAG.TILE_GROUND1;break;
+				case OBJ_BLOCK:tag=TAG.TILE_GROUND1;break;
+				case OBJ_WATER:o.remove();return;
+				default:if (G.log) System.out.print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
+				}
+				setTile(tag);
+				avaliable=true;
+				o.remove();			
 			}
-			setTile(tag);
-			avaliable=true;
-			o.remove();			
 		}		
 	}
 
-	private void lockHero() {
-		if (getTag()!=TAG.TILE_WATER) return;
-		G.hero.lock=true;
+	private void heroDead() {
+		if (!check(TAG.TILE_WATER,TAG.TILE_HOLE)) return;
+		G.hero.dead();
 	}
 
 	private void pedalActive() {
@@ -275,8 +360,8 @@ public class XTile implements IGTile {
 
 	@Override
 	public void unactive(IGSkill skill) {
-		if(G.log) System.out.println("UnactiveTile:("+x+","+y+") by "+skill);
-		if (getObject()!=null) getObject().unactive(skill);
+		if(G.log) System.out.println("UnactiveTile:("+x+","+y+") "+type+ " by "+skill);
+		if (getObject()!=null) for (IGObject p:getObject()) p.unactive(skill);
 		switch ((G.TAG)skill.getIndex()){
 		case SKILL_MOVE:pedalUnactive();break;
 		case SKILL_OBJECTMOVEDON:pedalUnactive();break;
@@ -290,17 +375,17 @@ public class XTile implements IGTile {
 		if (getTag()!=TAG.TILE_PEDAL_DOWN) return;
 		if ((Integer)arg[0]!=2) return;
 		G.toggleGroup.find((String)arg[1]).sub();
-		switch((Integer)arg[2]){
-		case 1:setTile(TAG.TILE_PEDAL_1);break;
-		case 2:setTile(TAG.TILE_PEDAL_2);break;
-		case 3:setTile(TAG.TILE_PEDAL_3);break;
-		case 4:setTile(TAG.TILE_PEDAL_4);break;
-		}
+		setTile((Integer)arg[2],(TAG)arg[3]);
 	}
 
 	@Override
 	public boolean getIsAvaliable() {
-		return (avaliable)&&(getObject()==null||getObject().getIsAvaliable());
+		boolean ret = true;
+		if (getObject()!=null){
+			for (IGObject p:getObject())
+				ret=ret&&p.getIsAvaliable();
+		}
+		return (avaliable)&&(ret);
 	}
 	
 	@Override
@@ -314,8 +399,14 @@ public class XTile implements IGTile {
 		//String s=map.map.getTileProperty(id, G.Label.Avaliable);
 		if (getObject()==null)
 			return true;
-		else
-			return getObject().getIsAvaliable();
+		else{
+			boolean ret = true;
+			if (getObject()!=null){
+				for (IGObject p:getObject())
+					ret=ret&&p.getIsAvaliable();
+			}
+			return ret;
+		}
 	}
 
 
@@ -333,7 +424,7 @@ public class XTile implements IGTile {
 	}
 
 	@Override
-	public IGObject getObject() {
+	public IGObject[] getObject() {
 		return map.objectGroup.getObject(x, y);
 	}
 
@@ -350,4 +441,37 @@ public class XTile implements IGTile {
 	public void active() {	return;	}
 	public IGTileState getState() {return null;}
 
+	public void fastSetTile(TAG tag, Object... arg) {
+		map.map.layers.get(0).tiles[map.map.height-1-y][x]=id=toId(tag);
+		type=tag;
+		//if (G.log) System.out.println("Change to "+tag+" id is "+id);
+		if (arg.length==0) return;
+		if (arg.length>this.arg.length) this.arg=arg;
+		else
+			for (int i=0;i<arg.length;++i){
+				this.arg[i]=arg[i];
+			}
+	}
+
+	void saveTo(TileSaveStruct ss) {
+		ss.id=id;
+		ss.tag=type;
+		ss.avaliable=avaliable;
+		if (arg!=null){
+			ss.arg=new Object[arg.length];
+			for (int i=0;i<arg.length;++i){
+				ss.arg[i]=arg[i];
+			}
+		}else 
+			ss.arg=null;				
+	}
+	
+	void loadFrom(TileSaveStruct ss){
+		G.flowmanager.remove(this);
+		map.map.layers.get(0).tiles[map.map.height-1-y][x]=id=ss.id;
+		type=ss.tag;
+		G.flowmanager.add(this);
+		avaliable=ss.avaliable;
+		arg=ss.arg;
+	}
 }
