@@ -62,10 +62,10 @@ public class MapObject extends ASprite implements IGObject {
 		Vector2 v=XTiledMap.toScreenCoordinate(o.mapx, o.mapy);
 		o.sx=v.x;o.sy=v.y;
 		o.x=o.mapx*32;o.y=o.mapy*32;
-		o.move[0]=AMoveBy.$(0.5f, 0,-32);
-		o.move[1]=AMoveBy.$(0.5f, -32,0);
-		o.move[2]=AMoveBy.$(0.5f, 32,0);
-		o.move[3]=AMoveBy.$(0.5f, 0,32);
+		o.move[0]=AMoveBy.$(0.25f, 0,-32);
+		o.move[1]=AMoveBy.$(0.25f, -32,0);
+		o.move[2]=AMoveBy.$(0.25f, 32,0);
+		o.move[3]=AMoveBy.$(0.25f, 0,32);
 		
 		return o;		
 	}
@@ -163,7 +163,7 @@ public class MapObject extends ASprite implements IGObject {
 	}
 
 	public void forward(final TAG dir){
-		G.lockInput=true;
+		++G.lockInput;++G.hero.lock;
 		lock=true;
 		runAction(ASequence.$(
 				ABreakIf.$(new IIfFunc(){
@@ -179,11 +179,11 @@ public class MapObject extends ASprite implements IGObject {
 						b=b&&(gx!=G.hero.mapx||gy!=G.hero.mapy);
 						if (b) {
 							visibleOfGet=false;
-							G.Log("Object "+id+" becomes invisible");
+							G.Log("Object "+id+" becomes invisible");							
 							tmx.getTile(mapx, mapy).unactive(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
 							mapx=gx;mapy=gy;
 						}
-						if (!b) G.lockInput=lock=false;
+						if (!b) {--G.lockInput;lock=false;--G.hero.lock;}
 						return !b;
 					}				
 				}),
@@ -192,11 +192,11 @@ public class MapObject extends ASprite implements IGObject {
 					public void onCall(Object[] params) {
 						mapx=gx;mapy=gy;
 						x=mapx*32;y=mapy*32;
-						G.lockInput=lock=false;
+						--G.lockInput;--G.hero.lock;lock=false;
 						visibleOfGet=true;
 						G.Log("Object "+id+" becomes visible");
 						tmx.getTile(mapx, mapy).active(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
-						tmx.save();
+						G.signToSave = true;
 					}
 				})
 				));
@@ -204,11 +204,13 @@ public class MapObject extends ASprite implements IGObject {
 	
 	private void pushedActive(final IGSkill skill) {
 		if (id!=TAG.OBJ_PULLABLE&&id!=TAG.OBJ_PUSHABLE&&id!=TAG.OBJ_ICE) return;
+		G.playSound(TAG.SOUND_PUSH);
 		forward((TAG)skill.getParams()[0]);
 	}
 	
 	private void pulledActive(final IGSkill skill) {
 		if (id!=TAG.OBJ_PULLABLE) return;
+		G.playSound(TAG.SOUND_PUSH);
 		forward((TAG)skill.getParams()[0]);
 	}
 	
@@ -229,16 +231,25 @@ public class MapObject extends ASprite implements IGObject {
 
 	private void footstepUnactive(IGSkill skill) {
 		if (id!=TAG.OBJ_DOOR) return;
-		if ((Integer)arg[0]==1) {
-			//tex=G.motp.getTexture("door");
-			closeDoor();
-		}		
+		if (skill.getIndex()!=TAG.SKILL_FOOTSTEP){
+			if ((Integer)arg[0]==1&&arg[1]==TAG.DOOR_WAIT) {
+				//tex=G.motp.getTexture("door");
+				closeDoor();
+			}
+		}else{
+			if ((Integer)arg[0]==1) {
+				//tex=G.motp.getTexture("door");
+				closeDoor();
+			}
+		}
 	}
 	
 	private void openDoor(){
 		if (id!=TAG.OBJ_DOOR) return;
-		if ((TAG)arg[1]==TAG.DOOR_CLOSE) 
-			animate(TAG.AA_DOOROPEN); 
+		if ((TAG)arg[1]==TAG.DOOR_CLOSE) {
+			animate(TAG.AA_DOOROPEN);
+			G.playSound(TAG.SOUND_DOOR);
+		}
 		arg[1]=TAG.DOOR_OPEN;
 	}
 	
@@ -258,12 +269,16 @@ public class MapObject extends ASprite implements IGObject {
 		if(b) {
 			if (arg[1]==TAG.DOOR_CLOSE){
 				animate(TAG.AA_DOOROPEN);
+				G.playSound(TAG.SOUND_DOOR);
 			}
 			arg[1]=TAG.DOOR_WAIT;
 		}else{
-			arg[1]=TAG.DOOR_CLOSE;
-			animate(TAG.AA_DOORCLOSE);
-			avaliable=false;
+			if (arg[1]!=TAG.DOOR_CLOSE){
+				arg[1]=TAG.DOOR_CLOSE;
+				animate(TAG.AA_DOORCLOSE);
+				G.playSound(TAG.SOUND_DOOR);
+				avaliable=false;
+			}
 		}
 	}
 	
@@ -285,6 +300,7 @@ public class MapObject extends ASprite implements IGObject {
 				remove();
 			}
 		}
+		//G.playSound(TAG.SOUND_THAW);
 	}
 
 	private void freeze(IGSkill skill) {
@@ -300,21 +316,22 @@ public class MapObject extends ASprite implements IGObject {
 		id=TAG.OBJ_ICE;
 		tex=G.motp.getTexture(name);
 		avaliable=false;
+		//G.playSound(TAG.SOUND_FREEZE);
 	}
 	
 	void animate(TAG tag){
 		AAnimate a;
 		switch(tag){
-		case AA_DOORCLOSE:a=AAnimate.$(new Animation(0.1f, G.motp.getTexture("door3"),G.motp.getTexture("door2"),G.motp.getTexture("door1"),G.motp.getTexture("door")));break;
-		case AA_DOOROPEN :a=AAnimate.$(new Animation(0.1f, G.motp.getTexture("door1"),G.motp.getTexture("door2"),G.motp.getTexture("door3"),G.motp.getTexture("door_open")));break;
+		case AA_DOORCLOSE:a=AAnimate.$(new Animation(0.05f, G.motp.getTexture("door3"),G.motp.getTexture("door2"),G.motp.getTexture("door1"),G.motp.getTexture("door")));break;
+		case AA_DOOROPEN :a=AAnimate.$(new Animation(0.05f, G.motp.getTexture("door1"),G.motp.getTexture("door2"),G.motp.getTexture("door3"),G.motp.getTexture("door_open")));break;
 		default: return;
 		}
-		G.lockInput=true;
+		++G.lockInput;
 		runAction(ASequence.$(
 				a,
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
-						G.lockInput=false;
+						--G.lockInput;
 					}
 				})
 				));

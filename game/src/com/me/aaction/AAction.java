@@ -3,29 +3,32 @@ package com.me.aaction;
 
 
 
+
 public class AAction {
 	public static boolean showlog = true;
 	
 	private ASprite mTarget;
 	private Object mTag = null;
-	private boolean running;
-	private boolean stoped = false; 
+	protected boolean running = false;
+	protected boolean stoped = true; 
 	public String discribtion(){return "AAction"; }
+	boolean isRoot = false;
 	
 	
 	protected void startWithTarget(ASprite pTarget){
 		mTarget=pTarget;
-		mTarget.addAction(this);
+		if (!(this instanceof AActionInstant)) mTarget.addAction(this);
 		running=true;
 		stoped = false;
-	//	G.Log(mTarget+"|Start: "+this);
+		//G.Log(mTarget+"|Start: "+this);
 	}
 	
 	public void stop(){
+		if (stoped) return;
 		running = false;
-		mTarget.removeAction(this);
+		if (!(this instanceof AActionInstant)) mTarget.removeAction(this);
 		stoped = true;
-	//	G.Log(mTarget+"|Stop : "+this);
+		//G.Log(mTarget+"|Stop : "+this);
 	}
 	
 	public void setTag(Object tag){ mTag = tag; }

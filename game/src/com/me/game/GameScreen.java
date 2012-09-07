@@ -21,16 +21,23 @@ public class GameScreen implements Screen,InputProcessor{
 	SpriteBatch batch;
 	XTiledMap tmx;
 	XFlowManager flowManager;
+	private int mission;
+	
+	public GameScreen(int mission) {
+		super();
+		this.mission=mission;
+	}
 	
 	public void show() {
 		dispose();
+		G.gameScreen=this;
 		G.sbtp=new SkillButtonTextureProvider();
 		G.motp=new MapObjectTextureProvider();
 		G.batch=batch = new SpriteBatch();
 		
 		
 		
-		tmx=XTiledLoader.initMap(Gdx.files.internal("map2/2.tmx"), "map2/");
+		tmx=XTiledLoader.initMap(Gdx.files.internal("map/"+mission+".tmx"), "map/");
 		
 		G.toggleGroup=new ToggleGroup();
 		flowManager=new XFlowManager(0.1f);
@@ -81,6 +88,11 @@ public class GameScreen implements Screen,InputProcessor{
 		G.toggleGroup=null;
 		G.batch=null;
 		G.flowmanager=null;
+		G.gameScreen=null;
+	}
+	
+	public void nextMisstion(){
+		G.game.setScreen(new GameScreen(mission+1));
 	}
 
 	public void hide() {

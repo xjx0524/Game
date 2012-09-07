@@ -8,7 +8,9 @@ public class GameMain extends Game {
 	Screen curScreen;
 	
 	public void create() {
+				G.game=this;
 				Gdx.graphics.setDisplayMode(G.ScreenWidth, G.ScreenHeight,false);
-				setScreen(curScreen=new GameScreen());
+				G.initSound();
+				setScreen(curScreen=new GameScreen(1));
 			}
 }

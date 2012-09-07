@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map height="5" orientation="orthogonal" tileheight="32" tilewidth="32" version="1.0" width="3"><properties><property name="blended tiles" value="7,8,15,16,23,24,31,32"/></properties>
+ <tileset firstgid="1" name="wall" tileheight="32" tilewidth="32">
+  <image height="128" source="wall.png" width="256"/>
+  <tile id="0">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="33" name="other" tileheight="32" tilewidth="32">
+  <image height="128" source="other.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="ground1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="ground2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="hole"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="water"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="ice"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="pedaldown"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal1"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal2"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal3"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal4"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="destination"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="49" name="stream" tileheight="32" tilewidth="32">
+  <image height="128" source="stream.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="stream_r1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="stream_r2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="stream_r3"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="stream_r4"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="stream_l1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="stream_l2"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="stream_l3"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="type" value="stream_l4"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="stream_u1"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="type" value="stream_u2"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="type" value="stream_u3"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="type" value="stream_u4"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="type" value="stream_d1"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="type" value="stream_d2"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="type" value="stream_d3"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="stream_d4"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="65" name="sand" tileheight="32" tilewidth="32">
+  <image height="128" source="sand.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="sand_r1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="sand_r2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="sand_r3"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="sand_r4"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="sand_l1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="sand_l2"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="sand_l3"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="type" value="sand_l4"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="sand_u1"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="type" value="sand_u2"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="type" value="sand_u3"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="type" value="sand_u4"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="type" value="sand_d1"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="type" value="sand_d2"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="type" value="sand_d3"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="sand_d4"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="81" name="tail" tileheight="32" tilewidth="32">
+  <image height="32" source="tail.png" width="32"/>
+ </tileset>
+ <layer height="5" name="layer" width="3">
+  <properties>
+   <property name="xPos" value="1"/>
+   <property name="yPos" value="1"/>
+  </properties>
+  <data compression="zlib" encoding="base64">
+   eJxjZWBgYAJiNiAWBWIDIOaDshWxsGWBWBqI5YAYACIkAT8=
+  </data>
+ </layer>
+ <objectgroup height="5" name="object" width="3"/>
+ <objectgroup height="5" name="toggle" width="3"/>
+</map>

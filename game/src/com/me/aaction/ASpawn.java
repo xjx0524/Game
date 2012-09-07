@@ -53,5 +53,11 @@ public class ASpawn extends AActionInterval {
 	static public ASpawn $(AFiniteTimeAction...aActions){
 		return actions(aActions);
 	}
+	
+	@Override
+	public void stop() {
+		//for (AAction p:list) p.stop();
+		super.stop();
+	}
 
 }

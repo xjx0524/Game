@@ -1,5 +1,11 @@
 package com.me.game;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me.inerface.IGObjectGroup;
 import com.me.map.XFlowManager;
@@ -21,7 +27,7 @@ public final class G {
 		
 		OBJ_PUSHABLE, OBJ_PULLABLE, OBJ_DOOR, OBJ_WATER, OBJ_ICE, OBJ_BLOCK, OBJ_WALL,
 		
-		TILE_GROUND1,TILE_GROUND2,TILE_WATER,TILE_TELEPORT,TILE_HOLE,TILE_ICE,TILE_OTHER,
+		TILE_GROUND1,TILE_GROUND2,TILE_WATER,TILE_TELEPORT,TILE_HOLE,TILE_ICE,TILE_DESTINATION,TILE_OTHER,
 		TILE_PEDAL,TILE_PEDAL_1,TILE_PEDAL_2,TILE_PEDAL_3,TILE_PEDAL_4,TILE_PEDAL_DOWN,
 		TILE_STREAM_U1,TILE_STREAM_U2,TILE_STREAM_U3,TILE_STREAM_U4,
 		TILE_STREAM_D1,TILE_STREAM_D2,TILE_STREAM_D3,TILE_STREAM_D4,
@@ -34,6 +40,9 @@ public final class G {
 		
 		DOOR_OPEN,DOOR_CLOSE,DOOR_WAIT, 
 		HS_ALIVE,HS_RELIVING,HS_DEAD, 
+		
+		SOUND_JUMP,SOUND_FREEZE,SOUND_PUSH,SOUND_PULL,SOUND_THAW,SOUND_FALL,SOUND_WATER, 
+		SOUND_PEDAL, SOUND_DOOR, SOUND_TELEPORT, SOUND_MOVE, SOUND_SLIDE, SOUND_FLOW, 
 		};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
@@ -43,9 +52,11 @@ public final class G {
 		if (!log) return; 
 		System.out.println(s);
 	}
+	public static GameMain game;
+	public static GameScreen gameScreen;
 	public static boolean log = true;
 	public static boolean hasmap = true;
-	public static boolean lockInput = false;
+	public static int lockInput = 0;
 	public static Hero hero;
 	public static XTiledMap tmx;
 	public static MapObjectTextureProvider motp;
@@ -55,6 +66,10 @@ public final class G {
 	public static SkillButtonGroup skillBottonGroup;
 	public static ToggleGroup toggleGroup;
 	public static XFlowManager flowmanager;
+	public static Map<TAG,Sound> soundEntrance;
+	public static Map<TAG,Music> musicEntrance;
+	public static boolean soundOpen = true;
+	public static boolean signToSave = false;
 	public static final class Label{
 		public final static String Name="Name";
 		public final static String Avaliable="Avaliable";
@@ -82,7 +97,7 @@ public final class G {
 		case DIR_LEFT:return 1;
 		case DIR_RIGHT:return 2;
 		case DIR_DOWN:return 0;
-		case DIR_UP:return 3;		
+		case DIR_UP:return 3;
 		}		
 	}
 	
@@ -101,7 +116,33 @@ public final class G {
 	}
 	public static void save() {
 		if (tmx!=null)
-			tmx.save();		
+			tmx.save();
+		signToSave =false;
 	}
 
+	public static void initSound(){
+		soundEntrance=new HashMap<TAG, Sound>();
+		soundEntrance.put(TAG.SOUND_FALL  , Gdx.audio.newSound(Gdx.files.internal("sound/hole.ogg")));
+		soundEntrance.put(TAG.SOUND_WATER , Gdx.audio.newSound(Gdx.files.internal("sound/water.ogg")));
+		soundEntrance.put(TAG.SOUND_FREEZE, Gdx.audio.newSound(Gdx.files.internal("sound/freeze.ogg")));
+		soundEntrance.put(TAG.SOUND_THAW  , Gdx.audio.newSound(Gdx.files.internal("sound/thaw.ogg")));
+		soundEntrance.put(TAG.SOUND_PUSH  , Gdx.audio.newSound(Gdx.files.internal("sound/push.ogg")));
+		soundEntrance.put(TAG.SOUND_PEDAL , Gdx.audio.newSound(Gdx.files.internal("sound/pedal.ogg")));
+		soundEntrance.put(TAG.SOUND_DOOR  , Gdx.audio.newSound(Gdx.files.internal("sound/door.ogg")));
+		soundEntrance.put(TAG.SOUND_JUMP  , Gdx.audio.newSound(Gdx.files.internal("sound/jump.ogg")));
+		soundEntrance.put(TAG.SOUND_TELEPORT  , Gdx.audio.newSound(Gdx.files.internal("sound/teleport.ogg")));
+		soundEntrance.put(TAG.SOUND_SLIDE , Gdx.audio.newSound(Gdx.files.internal("sound/slide.ogg")));
+		soundEntrance.put(TAG.SOUND_FLOW  , Gdx.audio.newSound(Gdx.files.internal("sound/flow.ogg")));
+	//	soundEntrance.put(TAG.SOUND_MOVE  , Gdx.audio.newSound(Gdx.files.internal("sound/move.ogg")));
+	}
+	
+	public static void playSound(TAG tag){
+		if (!soundOpen) return;
+		G.Log("PlaySound: "+tag);
+		Sound s;
+		if ((s=soundEntrance.get(tag))!=null)
+			s.play();
+		else 
+			G.Log("!!!Error!!! No sound found!!!");
+	}
 }

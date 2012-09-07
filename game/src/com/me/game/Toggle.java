@@ -72,14 +72,14 @@ public class Toggle{
 		++count;
 		if (G.log) System.out.println("Toggle "+name+" added");
 		if (count>=activeCount) active();
-		G.tmx.save();
+		G.signToSave = true;
 	}
 	
 	public void sub(){
 		--count;
 		if (G.log) System.out.println("Toggle "+name+" subtracted");
 		if (count<activeCount) unactive();
-		G.save();
+		G.signToSave = true;
 	}
 	
 	private void unactive() {

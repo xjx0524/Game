@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map height="21" orientation="orthogonal" tileheight="32" tilewidth="32" version="1.0" width="21"><properties><property name="blended tiles" value="7,8,15,16,23,24,31,32"/></properties>
+ <tileset firstgid="1" name="wall" tileheight="32" tilewidth="32">
+  <image height="128" source="wall.png" width="256"/>
+  <tile id="0">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="Avaliable" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="33" name="other" tileheight="32" tilewidth="32">
+  <image height="128" source="other.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="ground1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="ground2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="hole"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="water"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="ice"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="pedaldown"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal1"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal2"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal3"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
+    <property name="type" value="pedal4"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="Arg0" value="1"/>
+    <property name="Arg1" value="1"/>
+    <property name="type" value="teleport"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="destination"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="49" name="stream" tileheight="32" tilewidth="32">
+  <image height="128" source="stream.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="stream_r1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="stream_r2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="stream_r3"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="stream_r4"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="stream_l1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="stream_l2"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="stream_l3"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="type" value="stream_l4"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="stream_u1"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="type" value="stream_u2"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="type" value="stream_u3"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="type" value="stream_u4"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="type" value="stream_d1"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="type" value="stream_d2"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="type" value="stream_d3"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="stream_d4"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="65" name="sand" tileheight="32" tilewidth="32">
+  <image height="128" source="sand.png" width="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="sand_r1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="sand_r2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="sand_r3"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="sand_r4"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="sand_l1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="sand_l2"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="sand_l3"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="type" value="sand_l4"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="sand_u1"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="type" value="sand_u2"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="type" value="sand_u3"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="type" value="sand_u4"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="type" value="sand_d1"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="type" value="sand_d2"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="type" value="sand_d3"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="sand_d4"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="81" name="tail" tileheight="32" tilewidth="32">
+  <image height="32" source="tail.png" width="32"/>
+ </tileset>
+ <layer height="21" name="layer" width="21">
+  <properties>
+   <property name="0Arg0" value="2"/>
+   <property name="0Arg1" value="18"/>
+   <property name="0x" value="1"/>
+   <property name="0y" value="1"/>
+   <property name="10Arg0" value="2"/>
+   <property name="10Arg1" value="14"/>
+   <property name="10x" value="9"/>
+   <property name="10y" value="3"/>
+   <property name="11Arg0" value="10"/>
+   <property name="11Arg1" value="2"/>
+   <property name="11x" value="11"/>
+   <property name="11y" value="3"/>
+   <property name="12Arg0" value="2"/>
+   <property name="12Arg1" value="14"/>
+   <property name="12x" value="13"/>
+   <property name="12y" value="1"/>
+   <property name="13Arg0" value="6"/>
+   <property name="13Arg1" value="10"/>
+   <property name="13x" value="15"/>
+   <property name="13y" value="1"/>
+   <property name="14Arg0" value="10"/>
+   <property name="14Arg1" value="18"/>
+   <property name="14x" value="13"/>
+   <property name="14y" value="3"/>
+   <property name="15Arg0" value="2"/>
+   <property name="15Arg1" value="6"/>
+   <property name="15x" value="15"/>
+   <property name="15y" value="3"/>
+   <property name="16Arg0" value="2"/>
+   <property name="16Arg1" value="2"/>
+   <property name="16x" value="17"/>
+   <property name="16y" value="1"/>
+   <property name="17Arg0" value="2"/>
+   <property name="17Arg1" value="18"/>
+   <property name="17x" value="19"/>
+   <property name="17y" value="1"/>
+   <property name="18Arg0" value="18"/>
+   <property name="18Arg1" value="14"/>
+   <property name="18x" value="17"/>
+   <property name="18y" value="3"/>
+   <property name="19Arg0" value="2"/>
+   <property name="19Arg1" value="6"/>
+   <property name="19x" value="19"/>
+   <property name="19y" value="3"/>
+   <property name="1Arg0" value="2"/>
+   <property name="1Arg1" value="18"/>
+   <property name="1x" value="3"/>
+   <property name="1y" value="1"/>
+   <property name="20Arg0" value="2"/>
+   <property name="20Arg1" value="18"/>
+   <property name="20x" value="1"/>
+   <property name="20y" value="5"/>
+   <property name="21Arg0" value="6"/>
+   <property name="21Arg1" value="10"/>
+   <property name="21x" value="3"/>
+   <property name="21y" value="5"/>
+   <property name="22Arg0" value="2"/>
+   <property name="22Arg1" value="2"/>
+   <property name="22x" value="1"/>
+   <property name="22y" value="7"/>
+   <property name="23Arg0" value="2"/>
+   <property name="23Arg1" value="14"/>
+   <property name="23x" value="3"/>
+   <property name="23y" value="7"/>
+   <property name="24Arg0" value="14"/>
+   <property name="24Arg1" value="14"/>
+   <property name="24x" value="5"/>
+   <property name="24y" value="5"/>
+   <property name="25Arg0" value="14"/>
+   <property name="25Arg1" value="6"/>
+   <property name="25x" value="7"/>
+   <property name="25y" value="5"/>
+   <property name="26Arg0" value="10"/>
+   <property name="26Arg1" value="14"/>
+   <property name="26x" value="5"/>
+   <property name="26y" value="7"/>
+   <property name="27Arg0" value="10"/>
+   <property name="27Arg1" value="10"/>
+   <property name="27x" value="7"/>
+   <property name="27y" value="7"/>
+   <property name="28Arg0" value="18"/>
+   <property name="28Arg1" value="10"/>
+   <property name="28x" value="9"/>
+   <property name="28y" value="5"/>
+   <property name="29Arg0" value="2"/>
+   <property name="29Arg1" value="10"/>
+   <property name="29x" value="11"/>
+   <property name="29y" value="5"/>
+   <property name="2Arg0" value="18"/>
+   <property name="2Arg1" value="14"/>
+   <property name="2x" value="1"/>
+   <property name="2y" value="3"/>
+   <property name="30Arg0" value="6"/>
+   <property name="30Arg1" value="6"/>
+   <property name="30x" value="9"/>
+   <property name="30y" value="7"/>
+   <property name="31Arg0" value="2"/>
+   <property name="31Arg1" value="10"/>
+   <property name="31x" value="11"/>
+   <property name="31y" value="7"/>
+   <property name="32Arg0" value="2"/>
+   <property name="32Arg1" value="14"/>
+   <property name="32x" value="13"/>
+   <property name="32y" value="5"/>
+   <property name="33Arg0" value="2"/>
+   <property name="33Arg1" value="10"/>
+   <property name="33x" value="15"/>
+   <property name="33y" value="5"/>
+   <property name="34Arg0" value="18"/>
+   <property name="34Arg1" value="10"/>
+   <property name="34x" value="13"/>
+   <property name="34y" value="7"/>
+   <property name="35Arg0" value="10"/>
+   <property name="35Arg1" value="2"/>
+   <property name="35x" value="15"/>
+   <property name="35y" value="7"/>
+   <property name="36Arg0" value="14"/>
+   <property name="36Arg1" value="18"/>
+   <property name="36x" value="17"/>
+   <property name="36y" value="5"/>
+   <property name="37Arg0" value="6"/>
+   <property name="37Arg1" value="10"/>
+   <property name="37x" value="19"/>
+   <property name="37y" value="5"/>
+   <property name="38Arg0" value="14"/>
+   <property name="38Arg1" value="2"/>
+   <property name="38x" value="17"/>
+   <property name="38y" value="7"/>
+   <property name="39Arg0" value="18"/>
+   <property name="39Arg1" value="14"/>
+   <property name="39x" value="19"/>
+   <property name="39y" value="7"/>
+   <property name="3Arg0" value="2"/>
+   <property name="3Arg1" value="14"/>
+   <property name="3x" value="3"/>
+   <property name="3y" value="3"/>
+   <property name="40Arg0" value="6"/>
+   <property name="40Arg1" value="10"/>
+   <property name="40x" value="1"/>
+   <property name="40y" value="9"/>
+   <property name="41Arg0" value="18"/>
+   <property name="41Arg1" value="6"/>
+   <property name="41x" value="3"/>
+   <property name="41y" value="9"/>
+   <property name="42Arg0" value="10"/>
+   <property name="42Arg1" value="18"/>
+   <property name="42x" value="1"/>
+   <property name="42y" value="11"/>
+   <property name="43Arg0" value="18"/>
+   <property name="43Arg1" value="2"/>
+   <property name="43x" value="3"/>
+   <property name="43y" value="11"/>
+   <property name="44Arg0" value="2"/>
+   <property name="44Arg1" value="14"/>
+   <property name="44x" value="5"/>
+   <property name="44y" value="9"/>
+   <property name="45Arg0" value="2"/>
+   <property name="45Arg1" value="18"/>
+   <property name="45x" value="7"/>
+   <property name="45y" value="9"/>
+   <property name="46Arg0" value="14"/>
+   <property name="46Arg1" value="2"/>
+   <property name="46x" value="5"/>
+   <property name="46y" value="11"/>
+   <property name="47Arg0" value="6"/>
+   <property name="47Arg1" value="10"/>
+   <property name="47x" value="7"/>
+   <property name="47y" value="11"/>
+   <property name="48Arg0" value="6"/>
+   <property name="48Arg1" value="10"/>
+   <property name="48x" value="13"/>
+   <property name="48y" value="9"/>
+   <property name="49Arg0" value="14"/>
+   <property name="49Arg1" value="6"/>
+   <property name="49x" value="15"/>
+   <property name="49y" value="9"/>
+   <property name="4Arg0" value="2"/>
+   <property name="4Arg1" value="2"/>
+   <property name="4x" value="5"/>
+   <property name="4y" value="1"/>
+   <property name="50Arg0" value="18"/>
+   <property name="50Arg1" value="14"/>
+   <property name="50x" value="13"/>
+   <property name="50y" value="11"/>
+   <property name="51Arg0" value="18"/>
+   <property name="51Arg1" value="14"/>
+   <property name="51x" value="15"/>
+   <property name="51y" value="11"/>
+   <property name="52Arg0" value="10"/>
+   <property name="52Arg1" value="2"/>
+   <property name="52x" value="17"/>
+   <property name="52y" value="9"/>
+   <property name="53Arg0" value="14"/>
+   <property name="53Arg1" value="14"/>
+   <property name="53x" value="19"/>
+   <property name="53y" value="9"/>
+   <property name="54Arg0" value="18"/>
+   <property name="54Arg1" value="10"/>
+   <property name="54x" value="17"/>
+   <property name="54y" value="11"/>
+   <property name="55Arg0" value="18"/>
+   <property name="55Arg1" value="10"/>
+   <property name="55x" value="19"/>
+   <property name="55y" value="11"/>
+   <property name="56Arg0" value="10"/>
+   <property name="56Arg1" value="2"/>
+   <property name="56x" value="1"/>
+   <property name="56y" value="13"/>
+   <property name="57Arg0" value="2"/>
+   <property name="57Arg1" value="14"/>
+   <property name="57x" value="3"/>
+   <property name="57y" value="13"/>
+   <property name="58Arg0" value="2"/>
+   <property name="58Arg1" value="18"/>
+   <property name="58x" value="1"/>
+   <property name="58y" value="15"/>
+   <property name="59Arg0" value="10"/>
+   <property name="59Arg1" value="2"/>
+   <property name="59x" value="3"/>
+   <property name="59y" value="15"/>
+   <property name="5Arg0" value="10"/>
+   <property name="5Arg1" value="6"/>
+   <property name="5x" value="7"/>
+   <property name="5y" value="1"/>
+   <property name="60Arg0" value="2"/>
+   <property name="60Arg1" value="14"/>
+   <property name="60x" value="5"/>
+   <property name="60y" value="13"/>
+   <property name="61Arg0" value="2"/>
+   <property name="61Arg1" value="2"/>
+   <property name="61x" value="7"/>
+   <property name="61y" value="13"/>
+   <property name="62Arg0" value="6"/>
+   <property name="62Arg1" value="14"/>
+   <property name="62x" value="5"/>
+   <property name="62y" value="15"/>
+   <property name="63Arg0" value="2"/>
+   <property name="63Arg1" value="14"/>
+   <property name="63x" value="7"/>
+   <property name="63y" value="15"/>
+   <property name="64Arg0" value="18"/>
+   <property name="64Arg1" value="2"/>
+   <property name="64x" value="9"/>
+   <property name="64y" value="13"/>
+   <property name="65Arg0" value="6"/>
+   <property name="65Arg1" value="2"/>
+   <property name="65x" value="11"/>
+   <property name="65y" value="13"/>
+   <property name="66Arg0" value="10"/>
+   <property name="66Arg1" value="14"/>
+   <property name="66x" value="9"/>
+   <property name="66y" value="15"/>
+   <property name="67Arg0" value="14"/>
+   <property name="67Arg1" value="6"/>
+   <property name="67x" value="11"/>
+   <property name="67y" value="15"/>
+   <property name="68Arg0" value="18"/>
+   <property name="68Arg1" value="14"/>
+   <property name="68x" value="13"/>
+   <property name="68y" value="13"/>
+   <property name="69Arg0" value="6"/>
+   <property name="69Arg1" value="18"/>
+   <property name="69x" value="15"/>
+   <property name="69y" value="13"/>
+   <property name="6Arg0" value="18"/>
+   <property name="6Arg1" value="6"/>
+   <property name="6x" value="5"/>
+   <property name="6y" value="3"/>
+   <property name="70Arg0" value="14"/>
+   <property name="70Arg1" value="18"/>
+   <property name="70x" value="13"/>
+   <property name="70y" value="15"/>
+   <property name="71Arg0" value="2"/>
+   <property name="71Arg1" value="14"/>
+   <property name="71x" value="15"/>
+   <property name="71y" value="15"/>
+   <property name="72Arg0" value="10"/>
+   <property name="72Arg1" value="2"/>
+   <property name="72x" value="17"/>
+   <property name="72y" value="13"/>
+   <property name="73Arg0" value="18"/>
+   <property name="73Arg1" value="14"/>
+   <property name="73x" value="19"/>
+   <property name="73y" value="13"/>
+   <property name="74Arg0" value="18"/>
+   <property name="74Arg1" value="2"/>
+   <property name="74x" value="17"/>
+   <property name="74y" value="15"/>
+   <property name="75Arg0" value="2"/>
+   <property name="75Arg1" value="2"/>
+   <property name="75x" value="19"/>
+   <property name="75y" value="15"/>
+   <property name="76Arg0" value="6"/>
+   <property name="76Arg1" value="14"/>
+   <property name="76x" value="1"/>
+   <property name="76y" value="17"/>
+   <property name="77Arg0" value="2"/>
+   <property name="77Arg1" value="14"/>
+   <property name="77x" value="3"/>
+   <property name="77y" value="17"/>
+   <property name="78Arg0" value="2"/>
+   <property name="78Arg1" value="18"/>
+   <property name="78x" value="1"/>
+   <property name="78y" value="19"/>
+   <property name="79Arg0" value="2"/>
+   <property name="79Arg1" value="18"/>
+   <property name="79x" value="3"/>
+   <property name="79y" value="19"/>
+   <property name="7Arg0" value="18"/>
+   <property name="7Arg1" value="6"/>
+   <property name="7x" value="7"/>
+   <property name="7y" value="3"/>
+   <property name="80Arg0" value="6"/>
+   <property name="80Arg1" value="14"/>
+   <property name="80x" value="5"/>
+   <property name="80y" value="17"/>
+   <property name="81Arg0" value="6"/>
+   <property name="81Arg1" value="10"/>
+   <property name="81x" value="7"/>
+   <property name="81y" value="17"/>
+   <property name="82Arg0" value="18"/>
+   <property name="82Arg1" value="18"/>
+   <property name="82x" value="5"/>
+   <property name="82y" value="19"/>
+   <property name="83Arg0" value="6"/>
+   <property name="83Arg1" value="14"/>
+   <property name="83x" value="7"/>
+   <property name="83y" value="19"/>
+   <property name="84Arg0" value="18"/>
+   <property name="84Arg1" value="2"/>
+   <property name="84x" value="9"/>
+   <property name="84y" value="17"/>
+   <property name="85Arg0" value="10"/>
+   <property name="85Arg1" value="18"/>
+   <property name="85x" value="11"/>
+   <property name="85y" value="17"/>
+   <property name="86Arg0" value="10"/>
+   <property name="86Arg1" value="2"/>
+   <property name="86x" value="9"/>
+   <property name="86y" value="19"/>
+   <property name="87Arg0" value="2"/>
+   <property name="87Arg1" value="10"/>
+   <property name="87x" value="11"/>
+   <property name="87y" value="19"/>
+   <property name="88Arg0" value="2"/>
+   <property name="88Arg1" value="18"/>
+   <property name="88x" value="13"/>
+   <property name="88y" value="17"/>
+   <property name="89Arg0" value="2"/>
+   <property name="89Arg1" value="18"/>
+   <property name="89x" value="15"/>
+   <property name="89y" value="17"/>
+   <property name="8Arg0" value="10"/>
+   <property name="8Arg1" value="2"/>
+   <property name="8x" value="9"/>
+   <property name="8y" value="1"/>
+   <property name="90Arg0" value="14"/>
+   <property name="90Arg1" value="10"/>
+   <property name="90x" value="13"/>
+   <property name="90y" value="19"/>
+   <property name="91Arg0" value="2"/>
+   <property name="91Arg1" value="10"/>
+   <property name="91x" value="15"/>
+   <property name="91y" value="19"/>
+   <property name="92Arg0" value="10"/>
+   <property name="92Arg1" value="18"/>
+   <property name="92x" value="17"/>
+   <property name="92y" value="17"/>
+   <property name="93Arg0" value="10"/>
+   <property name="93Arg1" value="14"/>
+   <property name="93x" value="19"/>
+   <property name="93y" value="17"/>
+   <property name="94Arg0" value="2"/>
+   <property name="94Arg1" value="6"/>
+   <property name="94x" value="17"/>
+   <property name="94y" value="19"/>
+   <property name="95Arg0" value="14"/>
+   <property name="95Arg1" value="6"/>
+   <property name="95x" value="19"/>
+   <property name="95y" value="19"/>
+   <property name="9Arg0" value="10"/>
+   <property name="9Arg1" value="2"/>
+   <property name="9x" value="11"/>
+   <property name="9y" value="1"/>
+   <property name="xPos" value="10"/>
+   <property name="yPos" value="1"/>
+  </properties>
+  <data compression="zlib" encoding="base64">
+   eJzVlMEKgCAMhqWoUwUd6lAUuGtRvf/TNWHCGFLYEurwg98cAz+GhTEmY8mVXGI6zIIBzIppldzQTKBY6vFnz1bcW1bj98Bm7lTfqEfDbmYtfFRK7hP75P5CPkMMAf6jTyv8cHbng739qj9mP+98xu6nnPlVnzGcej9B+HnKf/SZ4v980+eEGVkGJc+YEzD3K/s=
+  </data>
+ </layer>
+ <objectgroup height="21" name="object" width="21"/>
+ <objectgroup height="21" name="toggle" width="21"/>
+</map>

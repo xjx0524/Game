@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class ASprite extends Actor {
-	List<AAction> actions;
+	protected List<AAction> actions;
 	List<AAction> actionsWillRemove;
 	List<AAction> actionsWillAdd;
 	public boolean visibleForPlayer = true;
@@ -30,7 +30,9 @@ public abstract class ASprite extends Actor {
 	
 	public void runAction(AAction action){
 		if (action==null) return;
-		action.startWithTarget(this);		
+		action.isRoot=true;
+		action.startWithTarget(this);
+		//actions.add(action);
 	}
 	
 	public void stopAction(AAction action){
@@ -90,7 +92,7 @@ public abstract class ASprite extends Actor {
 	}
 	
 	private void doAlter(SpriteBatch batch, float parentAlpha) {
-		for (AAction p:actions)	p.step(Gdx.graphics.getDeltaTime());
+		for (AAction p:actions)	if (p.isRoot) p.step(Gdx.graphics.getDeltaTime());
 		for (AAction p:actionsWillRemove)actions.remove(p);
 		for (AAction p:actionsWillAdd)actions.add(p);		
 		actionsWillRemove.clear();

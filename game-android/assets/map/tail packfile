@@ -1,9 +1,9 @@
 
-01.png
+tail1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-0
+tail
   rotate: false
   xy: 2, 2
   size: 32, 32

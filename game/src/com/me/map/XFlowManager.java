@@ -20,14 +20,14 @@ public class XFlowManager {
 	private Vector<IGTile> streamd=new Vector<IGTile>();
 	private Vector<IGTile> streaml=new Vector<IGTile>();
 	private Vector<IGTile> streamr=new Vector<IGTile>();
-	private TAG[] tstreamu=new TAG[]{TAG.TILE_STREAM_U1,TAG.TILE_STREAM_U2,TAG.TILE_STREAM_U3,TAG.TILE_STREAM_U4};
-	private TAG[] tstreamd=new TAG[]{TAG.TILE_STREAM_D1,TAG.TILE_STREAM_D2,TAG.TILE_STREAM_D3,TAG.TILE_STREAM_D4};
-	private TAG[] tstreaml=new TAG[]{TAG.TILE_STREAM_L1,TAG.TILE_STREAM_L2,TAG.TILE_STREAM_L3,TAG.TILE_STREAM_L4};
-	private TAG[] tstreamr=new TAG[]{TAG.TILE_STREAM_R1,TAG.TILE_STREAM_R2,TAG.TILE_STREAM_R3,TAG.TILE_STREAM_R4};
-	private TAG[] tsandu=new TAG[]{TAG.TILE_SAND_U1,TAG.TILE_SAND_U2,TAG.TILE_SAND_U3,TAG.TILE_SAND_U4};
-	private TAG[] tsandd=new TAG[]{TAG.TILE_SAND_D1,TAG.TILE_SAND_D2,TAG.TILE_SAND_D3,TAG.TILE_SAND_D4};
-	private TAG[] tsandl=new TAG[]{TAG.TILE_SAND_L1,TAG.TILE_SAND_L2,TAG.TILE_SAND_L3,TAG.TILE_SAND_L4};
-	private TAG[] tsandr=new TAG[]{TAG.TILE_SAND_R1,TAG.TILE_SAND_R2,TAG.TILE_SAND_R3,TAG.TILE_SAND_R4};	
+	static TAG[] tstreamu=new TAG[]{TAG.TILE_STREAM_U1,TAG.TILE_STREAM_U2,TAG.TILE_STREAM_U3,TAG.TILE_STREAM_U4};
+	static TAG[] tstreamd=new TAG[]{TAG.TILE_STREAM_D1,TAG.TILE_STREAM_D2,TAG.TILE_STREAM_D3,TAG.TILE_STREAM_D4};
+	static TAG[] tstreaml=new TAG[]{TAG.TILE_STREAM_L1,TAG.TILE_STREAM_L2,TAG.TILE_STREAM_L3,TAG.TILE_STREAM_L4};
+	static TAG[] tstreamr=new TAG[]{TAG.TILE_STREAM_R1,TAG.TILE_STREAM_R2,TAG.TILE_STREAM_R3,TAG.TILE_STREAM_R4};
+	static TAG[] tsandu=new TAG[]{TAG.TILE_SAND_U1,TAG.TILE_SAND_U2,TAG.TILE_SAND_U3,TAG.TILE_SAND_U4};
+	static TAG[] tsandd=new TAG[]{TAG.TILE_SAND_D1,TAG.TILE_SAND_D2,TAG.TILE_SAND_D3,TAG.TILE_SAND_D4};
+	static TAG[] tsandl=new TAG[]{TAG.TILE_SAND_L1,TAG.TILE_SAND_L2,TAG.TILE_SAND_L3,TAG.TILE_SAND_L4};
+	static TAG[] tsandr=new TAG[]{TAG.TILE_SAND_R1,TAG.TILE_SAND_R2,TAG.TILE_SAND_R3,TAG.TILE_SAND_R4};	
 	
 	public XFlowManager(float frameTime){
 		tmx=G.tmx;
@@ -52,6 +52,9 @@ public class XFlowManager {
 		if (v.size()==0) return;
 		for (IGTile p:v){
 			((XTile)p).fastSetTile(tags[i]);
+			if (p.getObject()!=null){
+				((XTile)p).flow();
+			}
 		}
 	}
 	

@@ -68,4 +68,10 @@ public class ASequence extends AActionInterval {
 	static public ASequence $(AFiniteTimeAction...aActions){
 		return actions(aActions);
 	}
+	
+	@Override
+	public void stop() {
+		//for (AAction p:list)	p.stop();
+		super.stop();
+	}
 }

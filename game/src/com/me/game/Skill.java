@@ -2,8 +2,6 @@ package com.me.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.me.aaction.ACall;
-import com.me.aaction.AEaseOutIn;
-import com.me.aaction.AMoveBy;
 import com.me.aaction.AParabola;
 import com.me.aaction.ASequence;
 import com.me.aaction.ICallFunc;
@@ -126,16 +124,17 @@ public class Skill implements IGSkill {
 	}
 	
 	static public void cast(G.TAG tag){
-		if (G.lockInput) return;
+		if (G.lockInput>0) return;
 		switch (tag){
 		case SKILL_JUMP:jump();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
 		}
-		G.tmx.save();
+		G.signToSave = true;
 	}
 
 	private static void thaw() {
+		G.playSound(TAG.SOUND_THAW);
 		int mapx=G.hero.mapx;
 		int mapy=G.hero.mapy;
 		int gx=mapx,gy=mapy;
@@ -150,6 +149,7 @@ public class Skill implements IGSkill {
 	}
 
 	private static void freeze() {
+		G.playSound(TAG.SOUND_FREEZE);
 		int mapx=G.hero.mapx;
 		int mapy=G.hero.mapy;
 		int gx=mapx,gy=mapy;
@@ -164,6 +164,7 @@ public class Skill implements IGSkill {
 	}
 
 	static private void jump() {
+		G.playSound(TAG.SOUND_JUMP);
 		int mapx=G.hero.mapx;
 		int mapy=G.hero.mapy;
 		int gx=mapx,gy=mapy;
@@ -201,15 +202,15 @@ public class Skill implements IGSkill {
 		G.hero.runAction(ASequence.$(
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
-						G.lockInput=true;
+						++G.lockInput;
 						if (G.log) System.out.println("JUMP TO ("+GX+","+GY+")");
 						
 					}
 				}),
-				AParabola.$(1,(mapy+GY)*16+48, new Vector2(GX*32,GY*32)),
+				AParabola.$(0.5f,(mapy+GY)*16+48, new Vector2(GX*32,GY*32)),
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
-						G.lockInput=false;
+						--G.lockInput;
 						G.hero.mapx=GX;
 						G.hero.mapy=GY;
 						G.tmx.getTile(GX, GY).active(G.hero.skill.generate(G.TAG.GEN_STAY));
@@ -225,8 +226,4 @@ public class Skill implements IGSkill {
 		return force;
 	}
 	
-	static private void jump2(){
-		G.hero.runAction(AEaseOutIn.$(AMoveBy.$(1, 0, 64)));
-	}
 }
-;

@@ -15,8 +15,9 @@ public class AForever extends AActionInterval {
 	
 	@Override
 	protected void step(float t) {
+		action.step(t);
 		if (action.getIsStoped())
-			if (action instanceof ASequence&&((ASequence)action).shouldbreak)
+			if (action instanceof ASequence&&((ASequence)action).shouldbreak||action instanceof ABreakIf&&((ABreakIf)action).shouldbreak)
 				stop();
 			else
 				action.startWithTarget(getTarget());
@@ -28,5 +29,10 @@ public class AForever extends AActionInterval {
 		return a;
 	}
 	
+	@Override
+	public void stop() {
+		//action.stop();
+		super.stop();
+	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.me.game.G;
+import com.me.game.G.TAG;
 
 /**ÍßÆ¬*/
 
@@ -56,5 +57,7 @@ public interface IGTile {
 	public Map<String, String> getProperties();
 	
 	public G.TAG getTag();
+	
+	public boolean checkDir(TAG direction);
 
 }

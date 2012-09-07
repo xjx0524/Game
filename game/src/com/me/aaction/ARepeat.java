@@ -40,5 +40,11 @@ public class ARepeat extends AActionInterval {
 	static public ARepeat actionWithAction(AFiniteTimeAction action,int time){
 		return $(action,time);
 	}	
+	
+	@Override
+	public void stop() {
+		//action.stop();
+		super.stop();
+	}
 
 }
