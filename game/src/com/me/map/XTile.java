@@ -13,7 +13,6 @@ import com.me.aaction.ICallFunc;
 import com.me.aaction.IIfFunc;
 import com.me.game.G;
 import com.me.game.G.TAG;
-import com.me.game.Hero;
 import com.me.game.MapObject;
 import com.me.game.Skill;
 import com.me.inerface.IGObject;
@@ -226,19 +225,21 @@ public class XTile implements IGTile {
 		if(G.log) System.out.println("ActiveTile:("+x+","+y+") "+type+ " by "+skill);
 		if (getObject()!=null)	for (IGObject p:getObject()) p.active(skill);
 		switch ((G.TAG)skill.getIndex()){
-		case SKILL_MOVE:win();pedalActive();heroDead();heroFlow(skill);teleportActive();heroSlide();break;
+		case SKILL_MOVE:markToWin();pedalActive();heroDead();heroFlow(skill);teleportActive();heroSlide();break;
+		case SKILL_TELE:markToWin();pedalActive();heroDead();heroFlow(skill);heroSlide();break;
 		case SKILL_OBJECTMOVEDON:pedalActive();objectMovedIn();flow();slide(skill);teleObject();break;
+		case SKILL_OBJECTTELE:pedalActive();objectMovedIn();flow();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
-		case SKILL_TELE:pedalActive();heroDead();heroFlow(skill);heroSlide();break;
+		
 		case SKILL_PUSH:
 		default:break;			
 		}		
 	}
 
-	private void win() {
+	private void markToWin() {
 		if (type!=TAG.TILE_DESTINATION) return;
-		G.gameScreen.nextMisstion();	
+		G.markToWin=true;
 	}
 
 	private void teleObject() {
@@ -252,15 +253,19 @@ public class XTile implements IGTile {
 			for (IGObject p:getObject()){
 				final MapObject  o=(MapObject)p;
 				++G.hero.lock;++G.lockInput;
+				G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 				o.runAction(ASequence.$(
 						ADelay.$(1f),
 						ACall.$(new ICallFunc() {
 							public void onCall(Object[] params) {
+								G.tmx.getTile(o.mapx, o.mapy).unactive(new Skill(TAG.SKILL_OBJECTMOVEDON,TAG.DIR_NONE));
 								o.mapx = (Integer)arg[0];
 								o.mapy = (Integer)arg[1];
 								o.x=o.mapx*32;
 								o.y=o.mapy*32;
+								G.tmx.getTile(o.mapx, o.mapy).active(new Skill(TAG.SKILL_OBJECTTELE, TAG.DIR_NONE));
 								--G.hero.lock;--G.lockInput;
+								G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 							}
 						})
 						));
@@ -319,15 +324,19 @@ public class XTile implements IGTile {
 		if(!G.tmx.getTile((Integer)arg[0], (Integer)arg[1]).getIsAvaliable()) return;
 		G.playSound(TAG.SOUND_TELEPORT);
 		++G.hero.lock;++G.lockInput;
+		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 		G.hero.runAction(ASequence.$(
 				ADelay.$(1f),
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
+						G.tmx.getTile(G.hero.mapx, G.hero.mapy).unactive(G.hero.skill.generate(TAG.GEN_STAY));
 						G.hero.mapx=(Integer)arg[0];
 						G.hero.mapy=(Integer)arg[1];
 						G.hero.x=(Integer)arg[0]*32;
 						G.hero.y=(Integer)arg[1]*32;
 						G.tmx.getTile(G.hero.mapx, G.hero.mapy).active(new Skill(TAG.SKILL_TELE));
+						G.hero.lx=G.hero.mapx;
+						G.hero.ly=G.hero.mapy;
 						if (G.log) System.out.println("Tele to ("+G.hero.mapx+","+G.hero.mapy+") CameraPos("+G.hero.getStage().getCamera().position.x+","+G.hero.getStage().getCamera().position.y+")");
 						--G.hero.lock;--G.lockInput;
 					}
@@ -407,14 +416,14 @@ public class XTile implements IGTile {
 					case OBJ_PULLABLE:tag=TAG.TILE_GROUND1;break;
 					case OBJ_PUSHABLE:tag=TAG.TILE_GROUND1;break;
 					case OBJ_BLOCK:tag=TAG.TILE_GROUND1;break;
-					case OBJ_WATER:o.remove();return;
+					case OBJ_WATER:o.markToRemove(true);return;
 					default:if (G.log) System.out.println("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
 					}
 					if  (check(TAG.TILE_WATER)) G.playSound(TAG.SOUND_WATER);
 					else if (check(TAG.TILE_HOLE)) G.playSound(TAG.SOUND_FALL);
 					setTile(tag);
 					avaliable=true;
-					o.remove();				
+					o.markToRemove(true);				
 				}
 			}
 		}else{
@@ -425,7 +434,7 @@ public class XTile implements IGTile {
 					if (getObject()==null) return;
 					for (IGObject o:getObject()){
 						switch(o.getId()){
-						case OBJ_WATER:o.remove();return;
+						case OBJ_WATER:o.markToRemove(true);return;
 						default:if (G.log) System.out.println("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
 						}
 					}
@@ -444,7 +453,7 @@ public class XTile implements IGTile {
 				if (getObject()==null) return;
 				for (IGObject o:getObject()){
 					switch(o.getId()){
-					case OBJ_WATER:o.remove();return;
+					case OBJ_WATER:o.markToRemove(true);return;
 					default:if (G.log) System.out.println("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!!!!!!!");break;
 					}
 				}

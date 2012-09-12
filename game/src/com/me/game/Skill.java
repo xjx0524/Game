@@ -124,11 +124,17 @@ public class Skill implements IGSkill {
 	}
 	
 	static public void cast(G.TAG tag){
-		if (G.lockInput>0) return;
+		if (G.lockInput>0&&tag!=TAG.SKILL_RESTART) return;
 		switch (tag){
 		case SKILL_JUMP:jump();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
+		case SKILL_RESTART:
+			G.game.setScreen(new GameScreen(G.gameScreen.getMission()));
+			G.lockInput=0;
+			G.markToWin=false;
+			G.markToResetCamera=false;
+			break;
 		}
 		G.signToSave = true;
 	}
@@ -203,6 +209,7 @@ public class Skill implements IGSkill {
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
 						++G.lockInput;
+						G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 						if (G.log) System.out.println("JUMP TO ("+GX+","+GY+")");
 						
 					}

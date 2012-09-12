@@ -42,7 +42,8 @@ public class SkillButtonGroup extends Stage {
 			if (((SkillButton)p).type==SkillButton.TYPE.SELECT)
 				((SkillButton)p).active(false);
 		}
-		skillButton.active(true);		
+		skillButton.active(true);
+		G.selectedSkill=skillButton.tag;
 	}
 	
 	public void oganize(){
@@ -54,6 +55,9 @@ public class SkillButtonGroup extends Stage {
 			case AUTO:auto.add(p);break;
 			case SELECT:sel.add(p);break;
 			case ACTIVE:act.add(p);break;
+			case RESTART:p.x=240;p.y=200;p.color.a=128;break;
+			case MUSIC:p.x=280;p.y=200;  p.color.a=128;break;
+			case LOCKMOVE:p.x=280;p.y=8; p.color.a=128;break;
 			}
 		}
 		switch(auto.size()){
@@ -76,7 +80,7 @@ public class SkillButtonGroup extends Stage {
 		case 3:act.get(0).x=280;act.get(0).y=60;
 			   act.get(1).x=280;act.get(1).y=100;
 			   act.get(2).x=280;act.get(2).y=140;
-			   break;			
+			   break;
 		}
 	}
 

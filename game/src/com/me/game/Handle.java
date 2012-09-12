@@ -15,7 +15,7 @@ import com.me.aaction.ASprite;
 public class Handle extends Stage {
 	
 	ASprite inner,outer;
-	private boolean touchisdown = false;
+	private boolean handleHolded = false;
 
 	public Handle(float width, float height, boolean stretch, SpriteBatch batch) {
 		super(width, height, stretch, batch);
@@ -121,8 +121,8 @@ public class Handle extends Stage {
 		Vector2 p=new Vector2();
 		toStageCoordinates(x, y, p);
 		x=(int)p.x;y=(int)p.y;
-		if (G.dis(x, y, 32, 32)<=32||touchisdown){
-			touchisdown = true;
+		if (G.dis(x, y, 32, 32)<=32||handleHolded){
+			handleHolded = true;
 			return inner.touchDown(x, y, pointer)||ret;			
 		}
 		return ret;			
@@ -130,16 +130,18 @@ public class Handle extends Stage {
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
 		boolean ret=super.touchDragged(x, y, pointer);
-		Vector2 p=new Vector2();
-		toStageCoordinates(x, y, p);
-		x=(int)p.x;y=(int)p.y;		
-		inner.touchDragged(x, y, pointer);
+		if (handleHolded){
+			Vector2 p=new Vector2();
+			toStageCoordinates(x, y, p);
+			x=(int)p.x;y=(int)p.y;		
+			inner.touchDragged(x, y, pointer);
+		}
 		return ret;
 	}
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		boolean ret=super.touchUp(x, y, pointer, button);
-		touchisdown=false;
+		handleHolded=false;
 		Vector2 p=new Vector2();
 		toStageCoordinates(x, y, p);
 		x=(int)p.x;y=(int)p.y;		

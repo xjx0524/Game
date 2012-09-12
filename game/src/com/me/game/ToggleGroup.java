@@ -35,5 +35,17 @@ public class ToggleGroup {
 		return null;
 	}
 	
+	public void save(){
+		for (Toggle p:list){
+			p.save();
+		}
+	}
+	
+	public void load(){
+		for (Toggle p:list){
+			p.load();
+		}
+	}
+	
 	
 }

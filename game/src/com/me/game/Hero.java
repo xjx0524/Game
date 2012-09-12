@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.me.aaction.AActionInterval;
 import com.me.aaction.ABlink;
@@ -41,18 +40,19 @@ public class Hero extends ASprite{
 	private boolean keyIsDown[] = new boolean[4]; 
 	private IGTMX tmx;
 	public int mapx,mapy;
-	private float sy;
-	private float sx;
-	private float oy;
-	private float ox;
+//	private float sy;
+//	private float sx;
+//	private float oy;
+//	private float ox;
 	private int lstablex,lstabley;
 	public Skill skill = new Skill();
 	public G.TAG skillindex = G.TAG.SKILL_NULL;
 	/**禁止移动*/
 	public int lock = 0;
-	int lx = 0;
-	int ly = 0;
+	public int lx = 0;
+	public int ly = 0;
 	private TAG state = TAG.HS_ALIVE;
+	public boolean lockMove = false;
 
 	Hero(){
 		super();
@@ -73,26 +73,27 @@ public class Hero extends ASprite{
 			ani[i]=new Animation(0.25f,texs[i]);
 		}
 		
-
 		tmx=G.tmx;
 		Vector2 v;
-		sx=G.ScreenWidth/2-16;sy=G.ScreenHeight/2-24;
+		//sx=G.ScreenWidth/2-16;sy=G.ScreenHeight/2-24;
 		if (G.hasmap){
 			v=tmx.getStartPointIndex();
 			mapx=(int)(v.x+0.5);mapy=(int)(v.y+0.5);
 			x=mapx*32;y=mapy*32;
 	//		v=XTiledMap.toScreenCoordinate(v.x, v.y);
 		}
+	//	ox=x-sx;oy=y-sy;
 		init();
 	}
 	
 	private void init() {
 		for (int i=0;i<4;++i)
 			amove[i]=ASequence.$(
-				//ACall.$(new ICallFunc() {public void onCall(Object[] params) { G.playSound(TAG.SOUND_MOVE);}}),
+				ACall.$(new ICallFunc() {public void onCall(Object[] params) { ++G.lockInput;++lock;}}),
 				move[i],
 				ACall.$(new ICallFunc() {								 
 				public void onCall(Object[] params) {
+					--G.lockInput;--lock;
 					if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
 					if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
 					lx=mapx;ly=mapy;
@@ -100,7 +101,7 @@ public class Hero extends ASprite{
 			}));
 		runAction(AForever.$(ASequence.$(
 				ACall.$(new ICallFunc() {
-					
+
 					public void onCall(Object[] params) {	
 						if (lock>0) ismoving=false;
 						else {
@@ -125,7 +126,7 @@ public class Hero extends ASprite{
 						AFiniteTimeAction a;
 						curdirection=direction;
 						iscurmoving=ismoving;
-						if (ismoving){
+						if (ismoving&&!lockMove ){
 
 							int gx=mapx,gy=mapy;
 							switch(curdirection){
@@ -198,6 +199,7 @@ public class Hero extends ASprite{
 		//G.Log("isMoving:"+ismoving);
 		
 		super.draw(batch,parentAlpha);
+		if (G.hero!=this) { if (parent!=null) parent.clear(); return; }
 		//if (G.hasmap)tmx.setPosition(ox-ax,oy-ay);
 		time+=Gdx.graphics.getDeltaTime();
 		if (iscurmoving){
@@ -212,12 +214,15 @@ public class Hero extends ASprite{
 			}
 			time=0;
 		}
-		float ax=x-sx-ox;float ay=y-sy-oy;
-		ox=x-sx;oy=y-sy;
+		//float ax=x-sx-ox;float ay=y-sy-oy;
+		//ox=x-sx;oy=y-sy;
 		//forward();
-		getStage().getCamera().translate(new Vector3(ax,ay,0));
-		getStage().getCamera().update();
-		getStage().getCamera().apply(Gdx.gl10);		
+		if (G.gameScreen!=null)
+			G.gameScreen.resetScreen();
+		//getStage().getCamera().translate(new Vector3(ax,ay,0));
+		//getStage().getCamera().update();
+		//getStage().getCamera().apply(Gdx.gl10);		
+		//G.Log("camerapos("+G.camera.position+")");
 	}
 	
 	/**向指定方向前进*/
@@ -237,6 +242,7 @@ public class Hero extends ASprite{
 		if (tmx.getTile(gx, gy)==null||!tmx.getTile(gx, gy).getIsAvaliable()) return;
 		mapx=GX;mapy=GY;
 		++this.lock;++G.lockInput;
+		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 		runAction(ASequence.$(
 				move[G.parseDirection(dir)],
 				ACall.$(new ICallFunc() {
@@ -305,12 +311,13 @@ public class Hero extends ASprite{
 	public void dead() {
 		state=TAG.HS_DEAD;
 		++lock;++G.lockInput;
+		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 		G.Log("dead");
 	}
 	
 	public void relive(){
 		state=TAG.HS_RELIVING;
-		tmx.load();
+		G.load();
 		G.Log("relive start");
 		runAction(
 				ASequence.$(
@@ -326,17 +333,18 @@ public class Hero extends ASprite{
 							public void onCall(Object[] params) {
 								color.a=1.0f;
 								state=TAG.HS_ALIVE;
+								tmx.getTile(mapx,mapy).unactive(skill.generate(TAG.GEN_STAY));
 								mapx=lstablex;mapy=lstabley;
-								x=mapx*32;y=mapy*32;	
+								x=mapx*32;y=mapy*32;
+								tmx.getTile(mapx,mapy).active(skill.generate(TAG.GEN_STAY));
+								lx=mapx;ly=mapy;
 								--G.lockInput;--lock;
+								G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 								G.Log("relive end");
 								scaleX=scaleY=1;
 							}
 						}))
 						));
-		//runAction(ABlink.$(0.5f, 6));
-		//color.a=0.0f;
-		//action(FadeIn.$(5.0f));
 	}
 
 }

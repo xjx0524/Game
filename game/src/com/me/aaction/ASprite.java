@@ -39,6 +39,12 @@ public abstract class ASprite extends Actor {
 		if (action==null) return;
 		action.stop();
 	}
+	
+	public void stopAllActions(){
+		for (AAction p:actions)	p.stop();
+		actions.clear();
+	}
+	
 	public void stopActionByTag(Object tag){
 		AAction action=null;
 		for (AAction p:actions){

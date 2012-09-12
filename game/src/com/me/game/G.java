@@ -6,7 +6,9 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.inerface.IGObjectGroup;
 import com.me.map.XFlowManager;
 import com.me.map.XTiledMap;
@@ -21,7 +23,8 @@ public final class G {
 		DIR_LEFT, DIR_RIGHT, DIR_DOWN, DIR_UP, DIR_NONE,
 		
 		SKILL_PUSH, SKILL_PULL, SKILL_JUMP, SKILL_FREEZE, SKILL_THAW, SKILL_FOOTSTEP,
-		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,SKILL_TELE,
+		SKILL_NULL, SKILL_OBJECTMOVEDON,SKILL_MOVE,SKILL_TELE,SKILL_OBJECTTELE, 
+		SKILL_RESTART, SKILL_MUSIC, SKILL_LOCKMOVE,
 		
 		GEN_STAY, GEN_PUSH, GEN_PULL,
 		
@@ -41,7 +44,7 @@ public final class G {
 		DOOR_OPEN,DOOR_CLOSE,DOOR_WAIT, 
 		HS_ALIVE,HS_RELIVING,HS_DEAD, 
 		
-		SOUND_JUMP,SOUND_FREEZE,SOUND_PUSH,SOUND_PULL,SOUND_THAW,SOUND_FALL,SOUND_WATER, 
+		SOUND_JUMP, SOUND_FREEZE, SOUND_PUSH, SOUND_PULL, SOUND_THAW, SOUND_FALL, SOUND_WATER, 
 		SOUND_PEDAL, SOUND_DOOR, SOUND_TELEPORT, SOUND_MOVE, SOUND_SLIDE, SOUND_FLOW, 
 		};
 	public static float dis(float x1,float y1,float x2,float y2){
@@ -52,6 +55,7 @@ public final class G {
 		if (!log) return; 
 		System.out.println(s);
 	}
+	
 	public static GameMain game;
 	public static GameScreen gameScreen;
 	public static boolean log = true;
@@ -64,12 +68,16 @@ public final class G {
 	public static SpriteBatch batch;
 	public static IGObjectGroup objectGroup;
 	public static SkillButtonGroup skillBottonGroup;
+	public static Stage dialogstg;
 	public static ToggleGroup toggleGroup;
 	public static XFlowManager flowmanager;
 	public static Map<TAG,Sound> soundEntrance;
 	public static Map<TAG,Music> musicEntrance;
-	public static boolean soundOpen = true;
 	public static boolean signToSave = false;
+	public static TAG selectedSkill = null;
+	public static boolean markToWin = false;
+	public static boolean markToResetCamera = true;
+	public static Camera camera = null; 
 	public static final class Label{
 		public final static String Name="Name";
 		public final static String Avaliable="Avaliable";
@@ -117,7 +125,16 @@ public final class G {
 	public static void save() {
 		if (tmx!=null)
 			tmx.save();
+		if (toggleGroup!=null)
+			toggleGroup.save();
 		signToSave =false;
+	}
+	
+	public static void load() {
+		if (tmx!=null)
+			tmx.load();
+		if (toggleGroup!=null)
+			toggleGroup.load();
 	}
 
 	public static void initSound(){
@@ -136,8 +153,10 @@ public final class G {
 	//	soundEntrance.put(TAG.SOUND_MOVE  , Gdx.audio.newSound(Gdx.files.internal("sound/move.ogg")));
 	}
 	
+	public static boolean musicOn = true , soundOn = true;
+	
 	public static void playSound(TAG tag){
-		if (!soundOpen) return;
+		if (!soundOn) return;
 		G.Log("PlaySound: "+tag);
 		Sound s;
 		if ((s=soundEntrance.get(tag))!=null)

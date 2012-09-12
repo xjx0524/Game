@@ -1,5 +1,6 @@
 package com.me.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,7 +10,7 @@ public class SkillButton extends Actor {
 	
 	
 
-	static enum TYPE{AUTO,SELECT,ACTIVE};
+	static enum TYPE{AUTO,SELECT,ACTIVE,RESTART,MUSIC, LOCKMOVE};
 	private boolean actived;
 	private TextureRegion tex[]=new TextureRegion[2];
 	public final G.TAG tag;
@@ -21,7 +22,8 @@ public class SkillButton extends Actor {
 		tex[1]=G.sbtp.getTexture(tag,false);
 		this.tag=tag;
 		this.type=type;
-		if (type==TYPE.AUTO)actived=true;else actived=false; 
+		if (type==TYPE.AUTO)actived=true;else actived=false;
+		if (type==TYPE.MUSIC) actived=G.musicOn||G.soundOn;
 	}
 	
 	
@@ -45,10 +47,13 @@ public class SkillButton extends Actor {
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		if (actived)
+		if (actived){
+			batch.setColor(Color.WHITE);
 			batch.draw(tex[0], x, y);
-		else
-			batch.draw(tex[1], x, y);
+		}else{
+			batch.setColor(color);
+			batch.draw(tex[1], x, y);			
+		}
 	}
 
 	@Override
@@ -61,7 +66,10 @@ public class SkillButton extends Actor {
 		switch(type){
 		case AUTO:return false;
 		case SELECT:select(!actived);return true;
+		case RESTART:
 		case ACTIVE:active(true);return true;
+		case MUSIC:actived=G.musicOn=G.soundOn=!actived;return false;
+		case LOCKMOVE:G.hero.lockMove=actived=true;return true;
 		}
 		return false;
 	}
@@ -71,7 +79,9 @@ public class SkillButton extends Actor {
 		switch(type){
 		case AUTO:return;
 		case SELECT:return;
+		case RESTART:
 		case ACTIVE:active(false);return;
+		case LOCKMOVE:G.hero.lockMove=actived=false;return;
 		}
 		return;
 	}

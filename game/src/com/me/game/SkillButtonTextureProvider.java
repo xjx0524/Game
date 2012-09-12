@@ -20,6 +20,10 @@ public class SkillButtonTextureProvider {
 		case SKILL_JUMP:if(active) return texs[1][2]; else return texs[0][2];
 		case SKILL_PULL:if(active) return texs[1][1]; else return texs[0][1];
 		case SKILL_PUSH:if (active) return texs[1][0]; else return texs[0][0];
+		
+		case SKILL_MUSIC:if (active) return texs[3][1]; else return texs[2][1];
+		case SKILL_RESTART:if (active) return texs[3][3]; else return texs[2][3];
+		case SKILL_LOCKMOVE:if (active) return texs[3][2]; else return texs[2][2];
 		}
 		return null;
 	}

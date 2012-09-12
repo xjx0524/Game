@@ -34,4 +34,6 @@ public interface IGObject {
 	
 	public void forward(final TAG dir);
 
+	void markToRemove(boolean b);
+
 }

@@ -8,7 +8,7 @@ import com.me.inerface.IGTile;
 
 public class Toggle{
 	
-	private int count,activeCount;
+	private int count,activeCount,saveCount;
 	private String[] t;
 	public final String name;
 	private String[][] arg;
@@ -70,14 +70,14 @@ public class Toggle{
 	
 	public void add(){
 		++count;
-		if (G.log) System.out.println("Toggle "+name+" added");
+		if (G.log) System.out.println("Toggle "+name+" added¡£  Count is "+count);
 		if (count>=activeCount) active();
 		G.signToSave = true;
 	}
 	
 	public void sub(){
 		--count;
-		if (G.log) System.out.println("Toggle "+name+" subtracted");
+		if (G.log) System.out.println("Toggle "+name+" subtracted. Count is "+count);
 		if (count<activeCount) unactive();
 		G.signToSave = true;
 	}
@@ -98,5 +98,13 @@ public class Toggle{
 			IGTile tile=G.tmx.getTile(x[i], y[i]);
 			if (tile!=null) tile.active(new Skill(skill[i],arg[i]));
 		}
+	}
+	
+	public void save(){
+		saveCount=count;
+	}
+	
+	public void load(){
+		count=saveCount;
 	}
 }

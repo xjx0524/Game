@@ -24,4 +24,6 @@ public interface IGObjectGroup {
 
 	void dispose();
 
+	void clear();
+
 }

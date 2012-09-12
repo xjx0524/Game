@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><map height="7" orientation="orthogonal" tileheight="32" tilewidth="32" version="1.0" width="7"><properties><property name="blended tiles" value="7,8,15,16,23,24,31,32"/></properties>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><map height="6" orientation="orthogonal" tileheight="32" tilewidth="32" version="1.0" width="11"><properties><property name="blended tiles" value="7,8,15,16,23,24,31,32"/></properties>
  <tileset firstgid="1" name="wall" tileheight="32" tilewidth="32">
   <image height="128" source="wall.png" width="256"/>
   <tile id="0">
@@ -196,7 +196,7 @@
   </tile>
   <tile id="6">
    <properties>
-    <property name="Arg0" value="1"/>
+    <property name="Arg0" value="2"/>
     <property name="Arg1" value="t1"/>
     <property name="type" value="pedal1"/>
    </properties>
@@ -210,8 +210,8 @@
   </tile>
   <tile id="8">
    <properties>
-    <property name="Arg0" value="2"/>
-    <property name="Arg1" value="t1"/>
+    <property name="Arg0" value=""/>
+    <property name="Arg1" value=""/>
     <property name="type" value="pedal3"/>
    </properties>
   </tile>
@@ -246,7 +246,7 @@
   <tile id="13">
    <properties>
     <property name="Arg0" value="1"/>
-    <property name="Arg1" value="3"/>
+    <property name="Arg1" value="1"/>
     <property name="type" value="teleport"/>
    </properties>
   </tile>
@@ -432,33 +432,34 @@
  <tileset firstgid="81" name="tail" tileheight="32" tilewidth="32">
   <image height="32" source="tail.png" width="32"/>
  </tileset>
- <layer height="7" name="layer" width="7">
+ <layer height="6" name="layer" width="11">
   <properties>
-   <property name="xPos" value="1"/>
+   <property name="xPos" value="3"/>
    <property name="yPos" value="1"/>
   </properties>
   <data compression="zlib" encoding="base64">
-   eJxjZWBgYAJiZigNw2xALArEBkAsCMSaQKwIxHpAzAeVUwZiTiBmgcopIsmB2JJALINDDh0TkpMFYmksWA6IAZHvBJU=
+   eJxjYIAAViBmwoPZGBBAFIgVgVgdB82HplYZCaug8fmQ7JaB6seGlaBqQeYZ4FEHwyC1skAsDcVSODBITg6IAYsOBes=
   </data>
  </layer>
- <objectgroup height="7" name="object" width="7">
-  <object height="32" name="Door" width="32" x="32" y="128">
+ <objectgroup height="6" name="object" width="11">
+  <object height="32" name="Ice" width="32" x="128" y="96"/>
+  <object height="32" name="Ice" width="32" x="192" y="96"/>
+  <object height="32" name="Ice" width="32" x="256" y="96"/>
+  <object height="32" name="Door" width="32" x="64" y="128">
    <properties>
     <property name="OArg0" value="1"/>
     <property name="OAvaliable" value="false"/>
    </properties>
   </object>
-  <object height="32" name="Pushable" width="32" x="128" y="128"/>
-  <object height="32" name="Pushable" width="32" x="160" y="128"/>
  </objectgroup>
- <objectgroup height="7" name="toggle" width="7">
-  <object height="14" name="t1" width="14" x="19" y="250">
+ <objectgroup height="6" name="toggle" width="11">
+  <object height="14" name="t1" width="14" x="88" y="198">
    <properties>
-    <property name="ActiveCount" value="1"/>
+    <property name="ActiveCount" value="3"/>
     <property name="count" value="1"/>
     <property name="skill0" value="SKILL_FOOTSTEP"/>
-    <property name="x0" value="1"/>
-    <property name="y0" value="2"/>
+    <property name="x0" value="2"/>
+    <property name="y0" value="1"/>
    </properties>
   </object>
  </objectgroup>

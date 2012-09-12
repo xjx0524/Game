@@ -59,6 +59,7 @@ public class XFlowManager {
 	}
 	
 	public void update(){
+		//if (G.log) return;
 		elapsedTime+=Gdx.graphics.getDeltaTime();
 		while (elapsedTime>4*frameTime) elapsedTime-=4*frameTime;
 		update(sandu,tsandu,(int)(elapsedTime/frameTime));

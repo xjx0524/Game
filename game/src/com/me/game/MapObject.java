@@ -126,6 +126,7 @@ public class MapObject extends ASprite implements IGObject {
 	int gx,gy;
 	 
 	public void active(IGSkill skill) {
+		if (isMarkedToRemove()) return;
 		if (lock&&!skill.getIsForce()) {
 			G.Log(("Refuse to ActiveObject:("+mapx+","+mapy+") "+id+" by "+skill));
 			return;
@@ -145,6 +146,7 @@ public class MapObject extends ASprite implements IGObject {
 
 	@Override
 	public void unactive(IGSkill skill) {
+		if (isMarkedToRemove()) return;
 		if(G.log) System.out.println("UnactiveObject:("+mapx+","+mapy+") "+id+" by "+skill);
 		switch((G.TAG)skill.getIndex()){
 		default:return;
@@ -163,7 +165,9 @@ public class MapObject extends ASprite implements IGObject {
 	}
 
 	public void forward(final TAG dir){
+		if (isMarkedToRemove()) return;
 		++G.lockInput;++G.hero.lock;
+		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock+"  ---In MapObject.forward");
 		lock=true;
 		runAction(ASequence.$(
 				ABreakIf.$(new IIfFunc(){
@@ -183,7 +187,11 @@ public class MapObject extends ASprite implements IGObject {
 							tmx.getTile(mapx, mapy).unactive(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
 							mapx=gx;mapy=gy;
 						}
-						if (!b) {--G.lockInput;lock=false;--G.hero.lock;}
+						if (!b) 
+						{
+							--G.lockInput;lock=false;--G.hero.lock;
+							G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
+						}
 						return !b;
 					}				
 				}),
@@ -193,6 +201,7 @@ public class MapObject extends ASprite implements IGObject {
 						mapx=gx;mapy=gy;
 						x=mapx*32;y=mapy*32;
 						--G.lockInput;--G.hero.lock;lock=false;
+						G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 						visibleOfGet=true;
 						G.Log("Object "+id+" becomes visible");
 						tmx.getTile(mapx, mapy).active(new Skill(G.TAG.SKILL_OBJECTMOVEDON,dir));
@@ -297,7 +306,7 @@ public class MapObject extends ASprite implements IGObject {
 		avaliable=true;
 		for (IGObject p:getTMX().getObject(mapx, mapy)){
 			if (p!=this&&((MapObject)p).getId()==TAG.OBJ_WATER){
-				remove();
+				markToRemove(true);
 			}
 		}
 		//G.playSound(TAG.SOUND_THAW);
