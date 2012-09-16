@@ -98,5 +98,18 @@ public class XFlowManager {
 		return false;
 		return true;
 	}
+
+	public void dispose() {
+		sandd.clear();
+		sandl.clear();
+		sandr.clear();
+		sandu.clear();
+		streamu.clear();
+		streamd.clear();
+		streaml.clear();
+		streamr.clear();		
+	}
+	
+	
 		
 }

@@ -336,11 +336,13 @@ public class MapObject extends ASprite implements IGObject {
 		default: return;
 		}
 		++G.lockInput;
+		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 		runAction(ASequence.$(
 				a,
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
 						--G.lockInput;
+						G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 					}
 				})
 				));

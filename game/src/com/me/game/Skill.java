@@ -129,12 +129,7 @@ public class Skill implements IGSkill {
 		case SKILL_JUMP:jump();break;
 		case SKILL_FREEZE:freeze();break;
 		case SKILL_THAW:thaw();break;
-		case SKILL_RESTART:
-			G.game.setScreen(new GameScreen(G.gameScreen.getMission()));
-			G.lockInput=0;
-			G.markToWin=false;
-			G.markToResetCamera=false;
-			break;
+		case SKILL_RESTART:G.markToRestart = true;break;
 		}
 		G.signToSave = true;
 	}
@@ -218,6 +213,7 @@ public class Skill implements IGSkill {
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
 						--G.lockInput;
+						G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 						G.hero.mapx=GX;
 						G.hero.mapy=GY;
 						G.tmx.getTile(GX, GY).active(G.hero.skill.generate(G.TAG.GEN_STAY));

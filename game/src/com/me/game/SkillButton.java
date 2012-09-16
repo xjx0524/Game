@@ -4,13 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.me.game.G.TAG;
 
 
 public class SkillButton extends Actor {
 	
 	
 
-	static enum TYPE{AUTO,SELECT,ACTIVE,RESTART,MUSIC, LOCKMOVE};
+	static enum TYPE{AUTO,SELECT,ACTIVE,RESTART,MUSIC, LOCKMOVE, BACK};
 	private boolean actived;
 	private TextureRegion tex[]=new TextureRegion[2];
 	public final G.TAG tag;
@@ -66,10 +67,11 @@ public class SkillButton extends Actor {
 		switch(type){
 		case AUTO:return false;
 		case SELECT:select(!actived);return true;
-		case RESTART:
+		case RESTART:G.playSound(TAG.SOUND_JUMP);active(true);return true;
 		case ACTIVE:active(true);return true;
-		case MUSIC:actived=G.musicOn=G.soundOn=!actived;return false;
+		case MUSIC:G.SoundOn(actived=G.musicOn=G.soundOn=!actived);G.game.save();return false;
 		case LOCKMOVE:G.hero.lockMove=actived=true;return true;
+		case BACK:actived=true;G.markToBack=true;G.playSound(TAG.SOUND_JUMP);return true;
 		}
 		return false;
 	}
@@ -82,6 +84,7 @@ public class SkillButton extends Actor {
 		case RESTART:
 		case ACTIVE:active(false);return;
 		case LOCKMOVE:G.hero.lockMove=actived=false;return;
+		case BACK:actived=false;return;
 		}
 		return;
 	}

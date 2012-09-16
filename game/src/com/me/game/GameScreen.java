@@ -1,6 +1,7 @@
 package com.me.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -10,9 +11,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.me.game.G.TAG;
 import com.me.map.XFlowManager;
 import com.me.map.XTiledLoader;
 import com.me.map.XTiledMap;
+import com.me.screens.LoadingScreen;
+import com.me.screens.SelectScreen;
 
 public class GameScreen implements Screen,InputProcessor{
 	
@@ -27,25 +31,28 @@ public class GameScreen implements Screen,InputProcessor{
 	private boolean screenHolded = false;
 	private int lholdx;
 	private int lholdy;
+	private int mapH,mapW;
 	
 	public boolean getIsScreenHoleded(){ return screenHolded;}
 	
 	public GameScreen(int mission) {
 		super();
 		this.mission=mission;
+		load();
+		G.loadfinished=true;		
 	}
 	
-	public void show() {
-		G.Log("Show Screen "+mission);
+	public void load() {
+		G.Log("Load Screen "+mission);
 		dispose();
-		G.sbtp=new SkillButtonTextureProvider();
-		G.motp=new MapObjectTextureProvider();
 		G.batch=batch = new SpriteBatch();
 		G.dialogstg=null;
 		
 		
 		
 		tmx=XTiledLoader.initMap(Gdx.files.internal("map/"+getMission()+".tmx"), "map/");
+		mapH=(int)(tmx.getSize().y*32);
+		mapW=(int)(tmx.getSize().x*32);
 		
 		G.toggleGroup=new ToggleGroup();
 		flowManager=new XFlowManager(0.1f);
@@ -64,7 +71,9 @@ public class GameScreen implements Screen,InputProcessor{
 		b=new SkillButton(G.TAG.SKILL_RESTART, SkillButton.TYPE.RESTART);
 		skillstg.addActor(b);
 		b=new SkillButton(G.TAG.SKILL_LOCKMOVE, SkillButton.TYPE.LOCKMOVE);
-		skillstg.addActor(b);		
+		skillstg.addActor(b);	
+		b=new SkillButton(G.TAG.BUTTON_BACK_SMALL, SkillButton.TYPE.BACK);
+		skillstg.addActor(b);
 		
 		if (mission>=3){
 			b=new SkillButton(G.TAG.SKILL_PUSH, SkillButton.TYPE.SELECT);
@@ -94,10 +103,23 @@ public class GameScreen implements Screen,InputProcessor{
 		G.gameScreen=this;
 		
 		G.markToResetCamera=true;
-		Dialog dialog=new Dialog("");
-		dialog.show();
+		
+		G.Log("Load Screen "+mission+" finished");
 	}
 
+	@Override
+	public void show() {
+		G.Log("Show Screen "+mission);
+		G.lockInput=G.hero.lock=0;
+		G.markToBack=G.markToRestart=G.markToWin=false;
+		G.markToResetCamera=true;
+		G.generateTip(mission);
+		if (G.curTip<=G.maxTip){
+			Dialog dialog=new Dialog(G.curTip);
+			dialog.show();
+		}
+		G.playMusic(TAG.MUSIC_BGM2);
+	}
 
 	public void dispose() {
 		if (G.gameScreen==this) G.gameScreen=null;
@@ -112,26 +134,34 @@ public class GameScreen implements Screen,InputProcessor{
 		skillstg=null;
 		tmx=null;
 		hero=null;
-		batch=null;
+		batch=null;		
 		if (G.gameScreen==null){
-			if (G.objectGroup!=null) {G.objectGroup.clear();G.objectGroup.dispose();}
-			if (G.skillBottonGroup!=null) {G.skillBottonGroup.clear();G.skillBottonGroup.dispose();}
+			if (G.objectGroup!=null) {
+					G.objectGroup.clear();
+					G.objectGroup.dispose();
+			}
+			if (G.skillBottonGroup!=null) {
+					G.skillBottonGroup.clear();
+					G.skillBottonGroup.dispose();
+			}
+			if (G.flowmanager!=null) 
+				G.flowmanager.dispose();
+			
 			G.hero=null;
 			G.tmx=null;
-			G.motp=null;
-			G.sbtp=null;
 			G.objectGroup=null;
 			G.skillBottonGroup=null;
 			G.toggleGroup=null;
 			G.batch=null;
-			G.flowmanager=null;	
+			G.flowmanager=null;
 			G.camera=null;
 		}
 	}
 	
 	public void nextMisstion(){
+		Gdx.input.setInputProcessor(null);
 		G.hero.stopAllActions();
-		G.game.setScreen(new GameScreen(getMission()+1));
+		G.game.setScreen(new LoadingScreen(getMission()+1));
 	}
 
 	public void hide() {
@@ -145,10 +175,16 @@ public class GameScreen implements Screen,InputProcessor{
 	public void render(float t) {
 		if (G.gameScreen==null) return;
 		if (stg==null||tmx==null||handlestg==null||skillstg==null) return;
-		Gdx.gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);		
-		stg.act(Gdx.graphics.getDeltaTime());
+		
 		G.flowmanager.update();
+		
+		Gdx.gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);		
+
+
+		
+		if (G.gameScreen!=null)	G.gameScreen.resetScreen();
 		tmx.draw((OrthographicCamera)stg.getCamera());
+		
 		handlestg.draw();
 		skillstg.draw();
 		
@@ -157,20 +193,37 @@ public class GameScreen implements Screen,InputProcessor{
 			G.markToWin=false;
 		}
 		
+		if (G.markToRestart){
+			G.restart();
+			G.markToRestart=false;
+		}
+		
+		if (G.markToBack){
+			Gdx.input.setInputProcessor(null);
+			G.game.setScreen(new SelectScreen());
+			G.markToBack=false;
+		}
+		
 		if (G.dialogstg!=null)
 			G.dialogstg.draw();
 	}
 
 	public void resize(int x, int y) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void resume() {
 		
 	}
 
-	public boolean keyDown(int keycode) { G.markToResetCamera=true; return hero.keyDown(keycode);}
+	public boolean keyDown(int keycode) 
+	{
+		if (keycode==Input.Keys.BACK||keycode==Input.Keys.BACKSPACE){
+			 G.markToBack=true;
+			 return true;
+		}
+		G.markToResetCamera=true; return hero.keyDown(keycode);
+	}
 	public boolean keyTyped(char arg0) {return false;	}
 	public boolean keyUp(int keycode) { return hero.keyUp(keycode);}
 	public boolean scrolled(int arg0) {	return false;}
@@ -193,6 +246,14 @@ public class GameScreen implements Screen,InputProcessor{
 				return true;
 			}else
 			{
+				Vector2 v1=new Vector2();
+				stg.toStageCoordinates(x, y, v1);
+				Vector2 v2=new Vector2();
+				stg.toStageCoordinates(0, Gdx.graphics.getHeight(), v2);
+				if (v1.x-v2.x<=G.ScreenWidth/4) return false;
+				if (v1.x-v2.x>=G.ScreenWidth*3/4) return false;
+				if (v1.y-v2.y<=G.ScreenHeight/4) return false;
+				if (v1.y-v2.y>=G.ScreenHeight*3/4) return false;
 				G.Log("screenHold("+x+","+y+")");
 				screenHolded=true;
 				G.markToResetCamera=false;
@@ -206,6 +267,7 @@ public class GameScreen implements Screen,InputProcessor{
 	}
 	public boolean touchDragged(int x, int y, int pointer) 
 	{
+		if (G.gameScreen!=this) return false;
 		if (G.dialogstg!=null){
 			return G.dialogstg.touchDragged(x, y, pointer);
 		}
@@ -239,6 +301,7 @@ public class GameScreen implements Screen,InputProcessor{
 	public boolean touchMoved(int arg0, int arg1) {	return false;}
 	public boolean touchUp(int x, int y, int pointer, int button) 
 	{
+		if (G.gameScreen!=this) return false;
 		if (G.dialogstg!=null){
 			return G.dialogstg.touchUp(x, y, pointer, button);
 		}
@@ -255,11 +318,17 @@ public class GameScreen implements Screen,InputProcessor{
 	
 	
 	public void resetScreen(){
-		if (!G.markToResetCamera) return;
 		Vector3 v=G.camera.position;
-		if (Math.abs(G.hero.x+16-v.x)<=0.1&&Math.abs(G.hero.y+16-v.y)<=0.1) return;
-		G.Log("("+G.hero.x+","+G.hero.y+"),("+v+")");
-		G.camera.translate((G.hero.x+16)-v.x,(G.hero.y+16)-v.y,0);
+		if (G.markToResetCamera){
+			if (Math.abs(G.hero.x+16-v.x)<=0.1&&Math.abs(G.hero.y+16-v.y)<=0.1) return;
+			//G.Log("("+G.hero.x+","+G.hero.y+"),("+v+")");
+			G.camera.translate((G.hero.x+16)-v.x,(G.hero.y+16)-v.y,0);
+		}
+		v=G.camera.position;
+		if (v.x<0) G.camera.translate(-v.x,0,0);
+		if (v.y<0) G.camera.translate(0,-v.y,0);
+		if (v.x>mapW) G.camera.translate(mapW-v.x,0,0);
+		if (v.y>mapH) G.camera.translate(0,mapH-v.y,0);
 		G.camera.update();
 		G.camera.apply(Gdx.gl10);
 	}

@@ -89,11 +89,12 @@ public class Hero extends ASprite{
 	private void init() {
 		for (int i=0;i<4;++i)
 			amove[i]=ASequence.$(
-				ACall.$(new ICallFunc() {public void onCall(Object[] params) { ++G.lockInput;++lock;}}),
+				ACall.$(new ICallFunc() {public void onCall(Object[] params) { ++G.lockInput;++lock;G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);}}),
 				move[i],
 				ACall.$(new ICallFunc() {								 
 				public void onCall(Object[] params) {
 					--G.lockInput;--lock;
+					G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 					if (G.hasmap) tmx.getTile(lx, ly).unactive(skill.generate(G.TAG.GEN_STAY));
 					if (G.hasmap) tmx.getTile(mapx, mapy).active(skill.generate(G.TAG.GEN_STAY));
 					lx=mapx;ly=mapy;
@@ -202,6 +203,7 @@ public class Hero extends ASprite{
 		if (G.hero!=this) { if (parent!=null) parent.clear(); return; }
 		//if (G.hasmap)tmx.setPosition(ox-ax,oy-ay);
 		time+=Gdx.graphics.getDeltaTime();
+		if (G.gameScreen!=null)	G.gameScreen.resetScreen();
 		if (iscurmoving){
 			if (visibleForPlayer){
 				batch.setColor(color);
@@ -217,8 +219,6 @@ public class Hero extends ASprite{
 		//float ax=x-sx-ox;float ay=y-sy-oy;
 		//ox=x-sx;oy=y-sy;
 		//forward();
-		if (G.gameScreen!=null)
-			G.gameScreen.resetScreen();
 		//getStage().getCamera().translate(new Vector3(ax,ay,0));
 		//getStage().getCamera().update();
 		//getStage().getCamera().apply(Gdx.gl10);		
@@ -272,10 +272,14 @@ public class Hero extends ASprite{
 	public boolean keyDown(int keycode) {
 		if (G.lockInput>0) return false;
 		switch (keycode){
-		case Input.Keys.DPAD_RIGHT:startMove(2);keyIsDown[2]=true;break;
-		case Input.Keys.DPAD_DOWN:startMove(0);keyIsDown[0]=true;break;
-		case Input.Keys.DPAD_UP:startMove(3);keyIsDown[3]=true;break;
-		case Input.Keys.DPAD_LEFT:startMove(1);keyIsDown[1]=true;break;
+		case Input.Keys.DPAD_RIGHT:case Input.Keys.D:
+			startMove(2);keyIsDown[2]=true;break;
+		case Input.Keys.DPAD_DOWN:case Input.Keys.S:
+			startMove(0);keyIsDown[0]=true;break;
+		case Input.Keys.DPAD_UP:case Input.Keys.W:
+			startMove(3);keyIsDown[3]=true;break;
+		case Input.Keys.DPAD_LEFT:case Input.Keys.A:
+			startMove(1);keyIsDown[1]=true;break;
 		default : return super.keyDown(keycode);
 		}
 		return true;
@@ -284,10 +288,10 @@ public class Hero extends ASprite{
 	 
 	public boolean keyUp(int keycode) {
 		switch (keycode){
-		case Input.Keys.DPAD_RIGHT:
-		case Input.Keys.DPAD_DOWN:
-		case Input.Keys.DPAD_UP:
-		case Input.Keys.DPAD_LEFT:
+		case Input.Keys.DPAD_RIGHT:case Input.Keys.D:
+		case Input.Keys.DPAD_DOWN:case Input.Keys.S:
+		case Input.Keys.DPAD_UP:case Input.Keys.W:
+		case Input.Keys.DPAD_LEFT:case Input.Keys.A:
 			stopMove();
 			keyIsDown[0]=keyIsDown[1]=keyIsDown[2]=keyIsDown[3]=false;
 			break;

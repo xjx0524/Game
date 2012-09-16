@@ -7,19 +7,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
-public abstract class ASprite extends Actor {
+public abstract class ASprite extends Group {
 	protected List<AAction> actions;
 	List<AAction> actionsWillRemove;
 	List<AAction> actionsWillAdd;
 	public boolean visibleForPlayer = true;
-	void removeAction(AAction a){
-		actionsWillRemove.add(a);
-	}
-	void addAction(AAction a){
-		actionsWillAdd.add(a);
-	}
+	
 	
 	{
 		actions=new LinkedList<AAction>();
@@ -27,6 +22,12 @@ public abstract class ASprite extends Actor {
 		actionsWillAdd=new LinkedList<AAction>();
 	}
 	
+	public void removeAction(AAction a){
+		actionsWillRemove.add(a);
+	}
+	public void addAction(AAction a){
+		actionsWillAdd.add(a);
+	}
 	
 	public void runAction(AAction action){
 		if (action==null) return;
@@ -85,14 +86,16 @@ public abstract class ASprite extends Actor {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		doAlter(batch,parentAlpha);
+		super.draw(batch, color.a*parentAlpha);
 	}
 	
 	public void draw(SpriteBatch batch, float parentAlpha,Texture tex) {
 		doAlter(batch,parentAlpha);
 		if (!visibleForPlayer) return;
-		batch.setColor(color);
+		batch.setColor(color.r,color.g,color.b,color.a*parentAlpha);
 		batch.draw (tex, x, y, originX, originY, width, height, scaleX,
 				 scaleY, rotation, 0, 0, tex.getWidth(),  tex.getHeight(),  false,  false);
+		super.draw(batch, color.a*parentAlpha);
 		//Log.i("", "DrawParam:"+ x+","+ y+"," +originX+","+ originY+","+ width+","+ height+","+ scaleX+",\n"+
 			//	 scaleY+","+ rotation+","+ 0+","+ 0+","+ tex.getWidth()+","+  tex.getHeight()+","+  false+"," + false);
 	}
@@ -107,7 +110,6 @@ public abstract class ASprite extends Actor {
 	
 	public abstract TextureRegion getTextureRegion();
 	public abstract void setTextureRegion(TextureRegion textureRegion);
-
 }
 
 

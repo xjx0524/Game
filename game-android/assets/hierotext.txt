@@ -1,0 +1,21 @@
+SKILL
+TILE_DESTINATION	终点		这就是我的目的地！
+TILE_GROUND2		花纹砖	 	这儿似乎没法把东西推上去。
+TILE_HOLE		坑		这地方可别掉下去，不过好像可以用啥填上。
+TILE_WATER		水		对不会游泳的我来说这跟那个坑没两样。
+TILE_ICE		冰面		好滑！
+TILE_PEDAL		踏板		踩上去似乎会发生什么神奇的事情。
+TILE_TELEPORT		传送阵		这会把人传送到哪呢？
+TILE_SAND_U1		流沙		走上去的话不知道会被冲到哪…
+TILE_STREAM_U1		流水		走上去的话不知道又会被冲到哪…
+OBJ_PUSHABLE		雕塑		这东西似乎我推得动…
+OBJ_PULLABLE		雕像		这东西好像还可以拉…
+OBJ_WATER		小水坑		还好不深，我能走过去。
+OBJ_ICE			冰块		这冰块真大啊。
+OBJ_DOOR		门		得想办法打开它。
+OBJ_BLOCK		碎石		噢，该死的石头，挡着我路了。
+SKILL_PUSH		推		我可以推动一些物体
+SKILL_PULL		拉		我可以拉动一些物体
+SKILL_FREEZE		冻结		我可以把一些水冻起来
+SKILL_THAW		融化		我可以把冰融化掉
+SKILL_JUMP		跳跃		我可以跳过一些东西

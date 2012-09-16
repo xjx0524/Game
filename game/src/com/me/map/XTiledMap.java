@@ -77,9 +77,10 @@ public class XTiledMap implements IGTMX {
 	
 	@Override
 	public void draw(OrthographicCamera c) {
-		(tileMapRenderer=new TileMapRenderer(map, atlas, 10, 10)).render(c);
+		(tileMapRenderer=new TileMapRenderer(map, atlas, 5, 6)).render(c);
 		tileMapRenderer.dispose();
 		tileMapRenderer=null;
+		
 		if (objectGroup==null){
 			objectGroup=G.objectGroup;
 			objectGroup.init();

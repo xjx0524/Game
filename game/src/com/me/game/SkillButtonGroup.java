@@ -52,12 +52,13 @@ public class SkillButtonGroup extends Stage {
 		ArrayList<Actor> act=new ArrayList<Actor>();
 		for (Actor p:getActors()){
 			switch (((SkillButton)p).type){
-			case AUTO:auto.add(p);break;
-			case SELECT:sel.add(p);break;
-			case ACTIVE:act.add(p);break;
+			case AUTO:auto.add(p);p.color.a=96;break;
+			case SELECT:sel.add(p);p.color.a=96;break;
+			case ACTIVE:act.add(p);p.color.a=96;break;
 			case RESTART:p.x=240;p.y=200;p.color.a=128;break;
 			case MUSIC:p.x=280;p.y=200;  p.color.a=128;break;
 			case LOCKMOVE:p.x=280;p.y=8; p.color.a=128;break;
+			case BACK:p.x=200;p.y=200;p.color.a=128;break;
 			}
 		}
 		switch(auto.size()){

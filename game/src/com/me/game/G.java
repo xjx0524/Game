@@ -9,9 +9,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.me.inerface.IGObjectGroup;
 import com.me.map.XFlowManager;
 import com.me.map.XTiledMap;
+import com.me.screens.LoadingScreen;
 
 public final class G {
 	
@@ -46,19 +48,26 @@ public final class G {
 		
 		SOUND_JUMP, SOUND_FREEZE, SOUND_PUSH, SOUND_PULL, SOUND_THAW, SOUND_FALL, SOUND_WATER, 
 		SOUND_PEDAL, SOUND_DOOR, SOUND_TELEPORT, SOUND_MOVE, SOUND_SLIDE, SOUND_FLOW, 
+		SOUND_PAGE, SOUND_NO_NAME, SOUND_WIN, 
+		MUSIC_BGM1, MUSIC_BGM2, MUSIC_BGM3,
+		
+		BUTTON_BACK_BIG, BUTTON_BACK_SMALL, 
 		};
 	public static float dis(float x1,float y1,float x2,float y2){
 		return (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 		
 		}
+	
+	public final static boolean log = true;
+	@SuppressWarnings("unused")
 	public static void Log(String s){
 		if (!log) return; 
 		System.out.println(s);
 	}
 	
+	public static Boolean loadfinished;	
 	public static GameMain game;
-	public static GameScreen gameScreen;
-	public static boolean log = true;
+	public static GameScreen gameScreen;	
 	public static boolean hasmap = true;
 	public static int lockInput = 0;
 	public static Hero hero;
@@ -77,7 +86,47 @@ public final class G {
 	public static TAG selectedSkill = null;
 	public static boolean markToWin = false;
 	public static boolean markToResetCamera = true;
-	public static Camera camera = null; 
+	public static Camera camera = null;
+	public static boolean mapChanged = false; 
+	public static int maxTip = 0;
+	public static int curTip = 0;
+	public static int maxMission = 1;
+	public static boolean musicOn = false , soundOn = true;
+	public static LabelStyle lsTitle;
+	public static LabelStyle lsText;
+	public static boolean markToRestart = false;
+	public static boolean markToBack = false;
+	public static TAG musicPlaying = null;
+	
+	public static void generateTip(int i){
+		switch(i){
+		case 1:setTip(2,3);return;
+		case 2:setTip(4,5);return;
+		case 3:setTip(6,7);return;
+		case 4:setTip(8,8);return;
+		case 5:setTip(9,10);return;
+		case 6:setTip(11,11);return;
+		case 7:setTip(12,12);return;
+		case 8:setTip(13,14);return;
+		case 9:setTip(15,15);return;
+		case 10:setTip(16,16);return;
+		case 11:setTip(17,17);return;
+		case 12:setTip(18,18);return;
+		case 13:setTip(19,19);return;
+		case 14:setTip(20,20);return;
+		case 15:setTip(21,21);return;
+		case 16:setTip(22,21);return;
+		case 17:setTip(22,22);return;
+		case 18:setTip(23,22);return;
+		}
+	}
+	
+	private static void setTip(int i, int j) {
+		if (i>curTip) curTip=i;
+		if (j>maxTip) maxTip=j;	
+		
+	}
+
 	public static final class Label{
 		public final static String Name="Name";
 		public final static String Avaliable="Avaliable";
@@ -99,6 +148,7 @@ public final class G {
 		public final static String DIR_UP="up";
 		public final static String DIR_DOWN="down";
 	}
+	
 	public static int parseDirection(TAG tag) {
 		switch (tag){
 		default: return -1;
@@ -122,6 +172,7 @@ public final class G {
 	public static boolean skillisactived(TAG tag){
 		return skillBottonGroup.getIsActived(tag);
 	}
+	
 	public static void save() {
 		if (tmx!=null)
 			tmx.save();
@@ -138,6 +189,7 @@ public final class G {
 	}
 
 	public static void initSound(){
+		
 		soundEntrance=new HashMap<TAG, Sound>();
 		soundEntrance.put(TAG.SOUND_FALL  , Gdx.audio.newSound(Gdx.files.internal("sound/hole.ogg")));
 		soundEntrance.put(TAG.SOUND_WATER , Gdx.audio.newSound(Gdx.files.internal("sound/water.ogg")));
@@ -150,10 +202,17 @@ public final class G {
 		soundEntrance.put(TAG.SOUND_TELEPORT  , Gdx.audio.newSound(Gdx.files.internal("sound/teleport.ogg")));
 		soundEntrance.put(TAG.SOUND_SLIDE , Gdx.audio.newSound(Gdx.files.internal("sound/slide.ogg")));
 		soundEntrance.put(TAG.SOUND_FLOW  , Gdx.audio.newSound(Gdx.files.internal("sound/flow.ogg")));
-	//	soundEntrance.put(TAG.SOUND_MOVE  , Gdx.audio.newSound(Gdx.files.internal("sound/move.ogg")));
+		soundEntrance.put(TAG.SOUND_PAGE  , Gdx.audio.newSound(Gdx.files.internal("sound/page.ogg")));
+		soundEntrance.put(TAG.SOUND_NO_NAME  , Gdx.audio.newSound(Gdx.files.internal("sound/no_name.ogg")));
+		soundEntrance.put(TAG.SOUND_WIN  , Gdx.audio.newSound(Gdx.files.internal("sound/win.ogg")));
+		
+		
+		musicEntrance=new HashMap<TAG,Music>();
+		musicEntrance.put(TAG.MUSIC_BGM1, Gdx.audio.newMusic(Gdx.files.internal("music/bgm1.ogg")));
+		musicEntrance.put(TAG.MUSIC_BGM2, Gdx.audio.newMusic(Gdx.files.internal("music/bgm2.ogg")));
+		musicEntrance.put(TAG.MUSIC_BGM3, Gdx.audio.newMusic(Gdx.files.internal("music/bgm3.ogg")));
 	}
 	
-	public static boolean musicOn = true , soundOn = true;
 	
 	public static void playSound(TAG tag){
 		if (!soundOn) return;
@@ -163,5 +222,72 @@ public final class G {
 			s.play();
 		else 
 			G.Log("!!!Error!!! No sound found!!!");
+	}
+	
+	public static void playMusic(TAG tag){
+		if (musicPlaying==tag) return;
+		if (!soundOn) {
+			musicPlaying=tag;
+			G.Log("PlayMisic: "+tag+" Sound off");
+			return;
+		}
+		G.Log("PlayMisic: "+tag);
+		Music s;
+		if ((s=musicEntrance.get(musicPlaying))!=null){
+			s.stop();
+		}else
+			G.Log("!!!Error!!! No music found!!!");
+		
+		if ((s=musicEntrance.get(tag))!=null){
+			s.setLooping(true);
+			s.play();
+		}else 
+			G.Log("!!!Error!!! No music found!!!");
+		
+		musicPlaying=tag;
+	}
+	
+	public static void SoundOn(boolean on){
+		G.Log("Sound on "+on);		
+		soundOn=on;
+		if (on){
+			Music s;
+			s=musicEntrance.get(musicPlaying);
+			s.setLooping(true);
+			s.play();
+		}else
+		{
+			Music s;
+			s=musicEntrance.get(musicPlaying);
+			if (s!=null)
+				s.stop();
+			else
+				G.Log("!!!Error!!! No music found!!!");
+		}
+	}
+	
+	public static void restart(){
+		Gdx.input.setInputProcessor(null);
+		game.setScreen(new LoadingScreen(G.gameScreen.getMission()));
+		lockInput=0;
+		G.Log("Restart");
+		markToWin=false;
+		markToResetCamera=true;
+		markToRestart=false;
+		markToBack=false;
+		//playMusic(TAG.MUSIC_BGM1);
+	}
+	
+	public static void disposeSound(){
+		for (TAG p:soundEntrance.keySet()){
+			soundEntrance.get(p).dispose();
+		}
+		for (TAG p:musicEntrance.keySet()){
+			musicEntrance.get(p).dispose();
+		}
+		soundEntrance.clear();
+		soundEntrance=null;
+		musicEntrance.clear();
+		musicEntrance=null;
 	}
 }

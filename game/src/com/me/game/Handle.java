@@ -16,6 +16,8 @@ public class Handle extends Stage {
 	
 	ASprite inner,outer;
 	private boolean handleHolded = false;
+	final float scale = 1.5f;
+	float ox,oy;
 
 	public Handle(float width, float height, boolean stretch, SpriteBatch batch) {
 		super(width, height, stretch, batch);
@@ -26,8 +28,8 @@ public class Handle extends Stage {
 				tex=new Texture("handle_inner.png");
 				originX=16;
 				originY=16;
-				this.x=16;
-				this.y=16;
+				this.x=32;
+				this.y=32;
 				width=height=32;
 				tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				
@@ -43,24 +45,24 @@ public class Handle extends Stage {
 			
 			@Override
 			public boolean touchDown(float x, float y, int pointer) {
-				float d=G.dis(x, y, 32, 32);
-				if (d>16){
-					x-=32;
-					y-=32;
-					float par=16/d;
+				float d=G.dis(x, y, ox, oy);
+				if (d>ox-16){
+					x-=ox;
+					y-=oy;
+					float par=(ox-16)/d;
 					x=x*par;
 					y=y*par;
-					x+=32;
-					y+=32;
+					x+=ox;
+					y+=oy;
 				}
-				if (d>=8){
+				if (d>=((ox-16)/2)){
 					if (x>y){
-						if (x+y<64)
+						if (x+y<outer.width)
 							G.hero.keyDown(Input.Keys.DPAD_DOWN);
 						else
 							G.hero.keyDown(Input.Keys.DPAD_RIGHT);
 					}else
-						if (x+y<64)
+						if (x+y<outer.width)
 							G.hero.keyDown(Input.Keys.DPAD_LEFT);
 						else
 							G.hero.keyDown(Input.Keys.DPAD_UP);
@@ -79,8 +81,8 @@ public class Handle extends Stage {
 			
 			@Override
 			public void touchUp(float x, float y, int pointer) {
-				this.x=16;
-				this.y=16;
+				this.x=ox-16;
+				this.y=oy-16;
 				G.hero.keyUp(Input.Keys.DPAD_LEFT);
 			}
 
@@ -94,11 +96,11 @@ public class Handle extends Stage {
 			Texture tex;
 			{
 				tex=new Texture("handle_outer.png");
-				originX=32;
-				originY=32;
+				originX=32*scale;
+				originY=32*scale;
 				x=0;
 				y=0;
-				width=height=64;
+				width=height=64*scale;
 				tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			}
 			@Override
@@ -108,6 +110,8 @@ public class Handle extends Stage {
 			@Override
 			public Actor hit(float x, float y) {return null;}
 		};
+		
+		ox=outer.width/2;oy=outer.height/2;
 		addActor(outer);
 		addActor(inner);		
 		inner.runAction(AForever.$(ARotateBy.$(20, 360)));
@@ -121,7 +125,7 @@ public class Handle extends Stage {
 		Vector2 p=new Vector2();
 		toStageCoordinates(x, y, p);
 		x=(int)p.x;y=(int)p.y;
-		if (G.dis(x, y, 32, 32)<=32||handleHolded){
+		if (G.dis(x, y, ox, oy)<=ox||handleHolded){
 			handleHolded = true;
 			return inner.touchDown(x, y, pointer)||ret;			
 		}

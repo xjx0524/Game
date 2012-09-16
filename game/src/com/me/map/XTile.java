@@ -30,6 +30,7 @@ public class XTile implements IGTile {
 	private boolean avaliable;
 	private TAG type;
 	private Object[] arg;
+	static HashMap<TAG,Integer> ids=new HashMap<TAG,Integer>();
 	
 	public XTile(XTiledMap map, int id, int x, int y) {
 		this.map = map;
@@ -209,9 +210,16 @@ public class XTile implements IGTile {
 	}
 	
 	public static int toId(TAG tag) {
-		for (int i=1;i<G.tmx.maxTileId;i++) {
-			if (parseTag(tag).equals(G.tmx.map.getTileProperty(i, "type")))
-				return i;
+		Integer tmp;
+		if ((tmp=ids.get(tag))==null){
+			for (int i=1;i<G.tmx.maxTileId;i++) {
+				if (parseTag(tag).equals(G.tmx.map.getTileProperty(i, "type"))){
+					ids.put(tag, i);
+					return i;					
+				}					
+			}
+		}else{
+			return tmp;
 		}
 		return 0;
 	}
@@ -239,6 +247,7 @@ public class XTile implements IGTile {
 
 	private void markToWin() {
 		if (type!=TAG.TILE_DESTINATION) return;
+		G.playSound(TAG.SOUND_WIN);
 		G.markToWin=true;
 	}
 
@@ -255,7 +264,7 @@ public class XTile implements IGTile {
 				++G.hero.lock;++G.lockInput;
 				G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 				o.runAction(ASequence.$(
-						ADelay.$(1f),
+						ADelay.$(0.1f),
 						ACall.$(new ICallFunc() {
 							public void onCall(Object[] params) {
 								G.tmx.getTile(o.mapx, o.mapy).unactive(new Skill(TAG.SKILL_OBJECTMOVEDON,TAG.DIR_NONE));
@@ -326,7 +335,7 @@ public class XTile implements IGTile {
 		++G.hero.lock;++G.lockInput;
 		G.Log("LocInput:"+G.lockInput+" HeroLock:"+G.hero.lock);
 		G.hero.runAction(ASequence.$(
-				ADelay.$(1f),
+				ADelay.$(0.1f),
 				ACall.$(new ICallFunc() {
 					public void onCall(Object[] params) {
 						G.tmx.getTile(G.hero.mapx, G.hero.mapy).unactive(G.hero.skill.generate(TAG.GEN_STAY));
@@ -563,16 +572,9 @@ public class XTile implements IGTile {
 	public void active() {	return;	}
 	public IGTileState getState() {return null;}
 
-	public void fastSetTile(TAG tag, Object... arg) {
+	public void fastSetTile(TAG tag) {
 		map.map.layers.get(0).tiles[map.map.height-1-y][x]=id=toId(tag);
 		type=tag;
-		//if (G.log) System.out.println("Change to "+tag+" id is "+id);
-		if (arg.length==0) return;
-		if (arg.length>this.arg.length) this.arg=arg;
-		else
-			for (int i=0;i<arg.length;++i){
-				this.arg[i]=arg[i];
-			}
 	}
 
 	void saveTo(TileSaveStruct ss) {

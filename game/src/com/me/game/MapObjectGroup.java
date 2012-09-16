@@ -1,8 +1,10 @@
 package com.me.game;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.me.game.G.TAG;
@@ -31,12 +33,19 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	}
 	
 	private void sort(){
+		for (Actor p:getActors()){
+			Vector3 v=new Vector3(G.camera.position);
+			v.x-=G.ScreenWidth/2;v.y-=G.ScreenHeight/2;
+			p.visible=(p.x-v.x>-32&&p.y-v.y>=-48&&p.x-v.x<G.ScreenWidth&&p.y-v.y<G.ScreenHeight);
+		}
 		G.hero.y-=17;
 		ArrayList<MapObject> door=new ArrayList<MapObject>(); 
 		ArrayList<MapObject> water=new ArrayList<MapObject>();
-		heap.init(getActors().size());
-		while (!getActors().isEmpty()){
-			Actor o = getActors().get(0);
+		LinkedList<Actor> list=new LinkedList<Actor>(getActors());
+		clear();
+		heap.init(list.size());
+		while (!list.isEmpty()){
+			Actor o = list.pop();//list.get(0);
 			if (o instanceof MapObject){
 				if (((MapObject)o).getId()==TAG.OBJ_DOOR)
 				{
@@ -49,9 +58,12 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 					o.y+=33;
 				}
 			}
-			heap.push(o);
-			o.remove();
+			if (o.visible)
+				heap.push(o);
+			else 
+				addActor(o);
 		}
+		
 		//if (G.log) System.out.print(heap.len);
 		while (!heap.isEmpty()) 
 			addActor(heap.pop());
@@ -69,8 +81,19 @@ public class MapObjectGroup extends Stage implements IGObjectGroup {
 	public void draw() {
 		//if (G.log) System.out.println("BD"+getActors().size());
 		sort();
-		//if (G.log) System.out.println("AD"+getActors().size());
+		//if (G.log) System.out.println("AD"+getActors().size());\
+		
 		super.draw();
+		ArrayList<Actor> l=new ArrayList<Actor>(); 
+		for (Actor p:getActors()){
+			if (p.isMarkedToRemove()){
+				l.add(p);
+			}
+		}
+		for (Actor p:l){
+			p.remove();
+		}
+		l.clear();
 	}
 
 	 
